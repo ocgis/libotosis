@@ -209,6 +209,7 @@ typedef _SIGACTION SIGACTION;
 /* MiNT function prototypes */
 typedef void voidfuncl(long);
 
+long Dchroot(char *);
 long Dclosedir(long);
 long Dcntl(short,char *,long);
 long Dgetcwd(char *,short,short);

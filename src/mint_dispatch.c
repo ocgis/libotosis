@@ -47,7 +47,10 @@ TosSystemCall *mint_syscalls[] = {
   /* 300 */  mint_Fxattr, mint_Flink, mint_Fsymlink, mint_Freadlink, mint_Dcntl,
   /* 305 */  mint_Fchown, mint_Fchmod, mint_Pumask, mint_Psemaphore, mint_Dlock,
   /* 310 */  mint_Psigpause, mint_Psigaction, mint_Pgeteuid, mint_Pgetegid, mint_Pwaitpid,
-  /* 315 */  mint_Dgetcwd, mint_Salert,
+  /* 315 */  mint_Dgetcwd, mint_Salert, UNUSED, UNUSED, UNUSED,
+  /* 320 */  UNUSED, UNUSED, UNUSED, UNUSED, UNUSED,
+  /* 325 */  UNUSED, UNUSED, UNUSED, UNUSED, UNUSED,
+  /* 330 */  mint_Dchroot
 };
 
 #ifdef DEBUG
@@ -62,7 +65,10 @@ char *mint_call_names[] = {
   "Dreaddir", "Drewinddir", "Dclosedir", "Fxattr", "Flink", "Fsymlink",
   "Freadlink", "Dcntl", "Fchown", "Fchmod", "Pumask", "Psemaphore",
   "Dlock", "Psigpause", "Psigaction", "Pgeteuid", "Pgetegid", "Pwaitpid",
-  "Dgetcwd", "Salert",
+  "Dgetcwd", "Salert", "unused", "unused", "unused",
+  "unused", "unused", "unused", "unused", "unused",
+  "unused", "unused", "unused", "unused", "unused",
+  "Dchroot"
 };
 
 /* Some formats still need to be filled in */
@@ -77,7 +83,10 @@ char *mint_call_args[] = {
   "%hd, %08lx, %s", "%08lx", "%08lx", "%hd, %s, %{XATTR}", "Flink", "Fsymlink",
   "%hd, %s, %08lx", "Dcntl", "%s, %hd, %hd", "%s, 0%03ho", "0%03ho", "Psemaphore",
   "Dlock", "Psigpause", "Psigaction", "", "", "Pwaitpid",
-  "%s, %hd, %hd", "Salert",
+  "%s, %hd, %hd", "Salert", NULL, NULL, NULL,
+  NULL, NULL, NULL, NULL, NULL,
+  NULL, NULL, NULL, NULL, NULL,
+  "%s"
 };
 
 /* Don't use non-32-bit formats for first arg!! */
@@ -93,7 +102,10 @@ char *mint_call_retv[] = {
   "%d %hS%S%s", "%d", "%d", "%d", "Flink", "Fsymlink",
   "%d, %hS%s", "Dcntl", "%d", "%d", "%03o", "Psemaphore",
   "Dlock", "Psigpause", "Psigaction", "%d", "%d", "Pwaitpid",
-  "%d %s", "Salert",
+  "%d %s", "Salert", NULL, NULL, NULL,
+  NULL, NULL, NULL, NULL, NULL,
+  NULL, NULL, NULL, NULL, NULL,
+  "%d"
 };
 #endif
 

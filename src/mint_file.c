@@ -376,6 +376,35 @@ MINTFUNC(Dpathconf)
   }
 }
 
+MINTFUNC(Dchroot)
+{
+  TOSARG(char *,path);
+  static char new_path[ 1024 ];
+
+  TOS_TO_UNIX( new_path, path );
+
+  if(chroot(new_path) == -1) {
+    switch(errno) {
+    case EPERM:
+    case EACCES:
+      return TOS_EACCDN;
+    case EFAULT:
+      return TOS_EIMBA;
+    case ENAMETOOLONG:
+      return TOS_ENAMETOOLONG;
+    case ENOENT:
+      return TOS_EFILNF;
+    case ENOTDIR:
+      return TOS_EPTHNF;
+    case ELOOP:
+      return TOS_ELOOP;
+    case EIO:
+      return TOS_EIO;
+    }
+  }
+
+  return TOS_E_OK;
+}
 
 /*
  *  Converts the contents of a stat buffer ot an Xattr structure

@@ -83,6 +83,7 @@ MINTFUNC(Pgetegid);
 MINTFUNC(Pwaitpid);
 MINTFUNC(Dgetcwd);
 MINTFUNC(Salert);
+MINTFUNC(Dchroot);
 
 unsigned long dispatch_mint( char * );
 

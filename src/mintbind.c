@@ -26,6 +26,7 @@
 
 typedef void voidfuncl(long);
 
+bindproto1(mint,long,Dchroot,0x14a,char *);
 bindproto1(mint,long,Dclosedir,0x12b,long);
 bindproto3(mint,long,Dcntl,0x130,short,char *,long);
 bindproto3(mint,long,Dgetcwd,0x13b,char *,short,short);
