@@ -159,32 +159,34 @@ int FdCnt[MAX_UNIX_FD];
 
 void init_gemdos( void )
 
-{	int i;
-	
-	/* initialize file handle mapping */
-	FdMap[GEMDOS_STDIN]  = GEMDOS_DEV_CON;
-	FdMap[GEMDOS_STDOUT] = GEMDOS_DEV_CON;
-	FdMap[GEMDOS_STDAUX] = Opt_aux_stderr ? GEMDOS_DEV_CON : GEMDOS_DEV_AUX;
-	FdMap[GEMDOS_STDPRN] = GEMDOS_DEV_PRN;
-	FdMap[GEMDOS_STD4]   = GEMDOS_DEV_CON;
-	FdMap[GEMDOS_STD5]   = GEMDOS_DEV_CON;
-	for( i = GEMDOS_STD5+1; i < MAX_GEMDOS_FD; ++i )
-		FdMap[i] = HANDLE_FREE;
-	/* all Unix fd's are unused */
-	for( i = MIN_UNIX_FD; i < MAX_UNIX_FD; ++i )
-		FdCnt[i] = 0;
-	
-	/* emulate a GEMDOS redirection if Unix stdin or stdout isn't a tty */
-/*  	if (!isatty(0)) */
-		FdMap[GEMDOS_STDIN] = 0;
-/*  	if (!isatty(1)) */
-		FdMap[GEMDOS_STDOUT] = 1;
-		FdMap[GEMDOS_STDAUX] = 2;
-	
-	find_info.dir_pointer = NULL;
+{
+    int i;
+ 
+    /* initialize file handle mapping */
+    FdMap[GEMDOS_STDIN]  = GEMDOS_DEV_CON;
+    FdMap[GEMDOS_STDOUT] = GEMDOS_DEV_CON;
+    FdMap[GEMDOS_STDAUX] = Opt_aux_stderr ? GEMDOS_DEV_CON : GEMDOS_DEV_AUX;
+    FdMap[GEMDOS_STDPRN] = GEMDOS_DEV_PRN;
+    FdMap[GEMDOS_STD4]   = GEMDOS_DEV_CON;
+    FdMap[GEMDOS_STD5]   = GEMDOS_DEV_CON;
+    for( i = GEMDOS_STD5+1; i < MAX_GEMDOS_FD; ++i )
+	FdMap[i] = HANDLE_FREE;
+    /* all Unix fd's are unused */
+    for( i = MIN_UNIX_FD; i < MAX_UNIX_FD; ++i )
+	FdCnt[i] = 0;
+    
+    /* emulate a GEMDOS redirection if Unix stdin or stdout isn't a tty */
+/*      if (!isatty(0)) */
+	FdMap[GEMDOS_STDIN] = 0;
+/*      if (!isatty(1)) */
+	FdMap[GEMDOS_STDOUT] = 1;
+	FdMap[GEMDOS_STDAUX] = 2;
+    
+    find_info.dir_pointer = NULL;
 }
 
 /* Local Variables:              */
-/* tab-width: 4                  */
+/* tab-width: 8                  */
+/* c-basic-offset: 4             */
 /* compile-command: "make -C .." */
 /* End:                          */
