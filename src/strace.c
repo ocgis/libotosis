@@ -291,6 +291,8 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 			else
 				struct_p = *((const char **)oargp)++;
 
+            struct_p = ntohl(struct_p);
+
 			if ((struc = find_struct( sfmt ))) {
 				*nfmt++ = '{';
 				for( i = 0, comp = struc->components; i < struc->n_components;
