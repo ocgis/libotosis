@@ -52,7 +52,7 @@ libotosis_la_LDFLAGS = @LT_VERSION_INFO@
 optiondef.c: ../tools/options_to_c.awk ../options.def
 	$(AWK) -f ../tools/options_to_c.awk < ../options.def > optiondef.c
 
-lib_otosis_optiondef.h: ../tools/options_to_h.awk ../options.def
+libotosis_optiondef.h: ../tools/options_to_h.awk ../options.def
 	$(AWK) -f ../tools/options_to_h.awk < ../options.def > libotosis_optiondef.h
 
 scancode_us.c: ../tools/make_scancode scancode.us
