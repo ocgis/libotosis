@@ -254,7 +254,6 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 {
 	unsigned long new_args[40], *nargp;		/* 40 should be enough... */
 	const char *p, *q, *start;
-	char new_format[256], *nfmt = new_format;
 	char sfmt[64];
 	int cnt = 0;
 
@@ -263,7 +262,6 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 	/* Parse the format to know about number and type of arguments */
 	for( p = fmt; *p; ++p ) {
 		if (*p != '%') {
-			*nfmt++ = *p;
             fprintf(stdout, "%c", *p);
 			continue;
 		}
@@ -295,21 +293,22 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 
             struct_p = (const char *)CL_TO_HL((UInt32)struct_p);
 
-			if ((struc = find_struct( sfmt ))) {
-				*nfmt++ = '{';
+			if ((struc = find_struct( sfmt )))
+            {
+                fprintf(stdout, "{");
 				for( i = 0, comp = struc->components; i < struc->n_components;
 					 ++i, ++comp ) {
-					strcpy( nfmt, comp->name );
-					nfmt += strlen(comp->name );
-					*nfmt++ = '=';
+					fprintf(stdout, "%s=", comp->name);
 
 					carg = (const void *)(struct_p + comp->offset);
 					single_arg( comp->format, &carg);
 
 					if (i != struc->n_components-1)
-						*nfmt++ = ' ';
+                    {
+                      fprintf(stdout, " ");
+                    }
 				}
-				*nfmt++ = '}';
+				fprintf(stdout, "}");
 			}
 			else
 				fprintf( stderr, "Internal error: Cannot print struct %s\n",
@@ -328,10 +327,11 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 
 			if (cnt == 1 && extra_arg) {
 				/* special case for translated errno's: */
-				if (ffs) {
-					*nfmt++ = '%';
-					*nfmt++ = 's';
-					*(char **)nargp++ = *(char **)extra_arg;
+				if(ffs)
+                {
+                  fprintf(stdout,
+                          "%s",
+                          (char *)CL_TO_HL(*(UInt32 *)extra_arg));
 				}
 				else
 					single_arg(sfmt, (const void **)&extra_arg);
@@ -341,11 +341,7 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 				single_arg(sfmt, &oargp);
 		}
 	}
-	*nfmt = 0;
-	
-	/* Ok, now the promoted arguments are in new_args, and we can call
-	 * standard vfprintf() */
-	/*	return vfprintf( f, new_format, new_args ); */
+
 	return 0;
 }
 
