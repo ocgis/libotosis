@@ -1,7 +1,7 @@
 CC = m68k-mint-gcc
 CFLAGS = -Wall -Wunused -Wmissing-prototypes
 
-PROGRAMS = fsfirstnext1 fxattr1 hello
+PROGRAMS = fsfirstnext1 fcntl1 fxattr1 hello
 
 all: $(PROGRAMS)
 
