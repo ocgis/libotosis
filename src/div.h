@@ -108,9 +108,10 @@ typedef struct {
 } Diskinfo;
 
 typedef struct {
-  DIR *dir_pointer;		/* Pointer to DIR */
-  char file_mask[ 1024 ];	/* File mask */
-  int find_mask;		/* Selection of file types to return */
+  DIR *dir_pointer;             /* Pointer to DIR */
+  char directory[1024];         /* Name of directory */
+  char file_mask[1024];         /* File mask */
+  int find_mask;                /* Selection of file types to return */
 } DirContext;
 
 typedef struct {
