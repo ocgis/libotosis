@@ -1,11 +1,12 @@
 CC = m68k-mint-gcc
 CFLAGS = -Wall -Wunused -Wmissing-prototypes
 
-PROGRAMS = fsfirstnext1 hello
+PROGRAMS = fsfirstnext1 fxattr1 hello
 
 all: $(PROGRAMS)
 
 cpprogs: $(PROGRAMS)
+	m68k-mint-strip $(PROGRAMS)
 	cp $(PROGRAMS) ../m68kbin
 
 clean:
