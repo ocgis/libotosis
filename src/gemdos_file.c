@@ -26,7 +26,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <fnmatch.h>
-#include <netinet/in.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -34,6 +33,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "client_endian.h"
 #include "memory.h"
 #include "div.h"
 #include "prototypes.h"
@@ -512,9 +512,9 @@ GEMDOSFUNC(Fsnext)
   }
 
   prog->dta->d_attrib = a;
-  prog->dta->d_time = htons(0);  /* FIXME */
-  prog->dta->d_date = htons(0);  /* FIXME */
-  prog->dta->d_length = htonl(fstat.st_size);
+  prog->dta->d_time   = HW_TO_CW(0);  /* FIXME */
+  prog->dta->d_date   = HW_TO_CW(0);  /* FIXME */
+  prog->dta->d_length = HL_TO_CL(fstat.st_size);
   unix_to_tos_file_short( fname, e->d_name );
   strcpy( prog->dta->d_fname, fname );
 

@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
-#include <netinet/in.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -33,6 +32,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
+#include "client_endian.h"
 #include "div.h"
 #include "prototypes.h"
 #include "toserrors.h"
@@ -177,7 +177,7 @@ MINTFUNC(Fcntl)
   TOSARG(short,cmd);
   long ret;
   int unix_handle = handle;
-  int fd, fp;
+  int fp;
   struct stat buf;
   int retcode;
 
@@ -436,36 +436,37 @@ MINT_UNIMP(Dchroot);
 
 void stat_to_xattr( Xattr *attr, struct stat *buf )
 { 
-  if( S_ISCHR( buf->st_mode ) )	attr->mode = htons(TOS_S_IFCHR);
-  if( S_ISDIR( buf->st_mode ) )	attr->mode = htons(TOS_S_IFDIR);
-  if( S_ISREG( buf->st_mode ) )	attr->mode = htons(TOS_S_IFREG);
-  if( S_ISFIFO( buf->st_mode ) ) attr->mode = htons(TOS_S_IFIFO);
-  if( S_ISLNK( buf->st_mode ) )	attr->mode = htons(TOS_S_IFLNK);
+  if( S_ISCHR( buf->st_mode ) )	attr->mode = HW_TO_CW(TOS_S_IFCHR);
+  if( S_ISDIR( buf->st_mode ) )	attr->mode = HW_TO_CW(TOS_S_IFDIR);
+  if( S_ISREG( buf->st_mode ) )	attr->mode = HW_TO_CW(TOS_S_IFREG);
+  if( S_ISFIFO( buf->st_mode ) ) attr->mode = HW_TO_CW(TOS_S_IFIFO);
+  if( S_ISLNK( buf->st_mode ) )	attr->mode = HW_TO_CW(TOS_S_IFLNK);
 
-  if( buf->st_mode & S_IRUSR )	attr->mode |= htons(TOS_S_IRUSR);
-  if( buf->st_mode & S_IWUSR )	attr->mode |= htons(TOS_S_IWUSR);
-  if( buf->st_mode & S_IXUSR )	attr->mode |= htons(TOS_S_IXUSR);
-  if( buf->st_mode & S_IRGRP )	attr->mode |= htons(TOS_S_IRGRP);
-  if( buf->st_mode & S_IWGRP )	attr->mode |= htons(TOS_S_IWGRP);
-  if( buf->st_mode & S_IXGRP )	attr->mode |= htons(TOS_S_IXGRP);
-  if( buf->st_mode & S_IROTH )	attr->mode |= htons(TOS_S_IROTH);
-  if( buf->st_mode & S_IWOTH )	attr->mode |= htons(TOS_S_IWOTH);
-  if( buf->st_mode & S_IXOTH )	attr->mode |= htons(TOS_S_IXOTH);
+  if( buf->st_mode & S_IRUSR )	attr->mode |= HW_TO_CW(TOS_S_IRUSR);
+  if( buf->st_mode & S_IWUSR )	attr->mode |= HW_TO_CW(TOS_S_IWUSR);
+  if( buf->st_mode & S_IXUSR )	attr->mode |= HW_TO_CW(TOS_S_IXUSR);
+  if( buf->st_mode & S_IRGRP )	attr->mode |= HW_TO_CW(TOS_S_IRGRP);
+  if( buf->st_mode & S_IWGRP )	attr->mode |= HW_TO_CW(TOS_S_IWGRP);
+  if( buf->st_mode & S_IXGRP )	attr->mode |= HW_TO_CW(TOS_S_IXGRP);
+  if( buf->st_mode & S_IROTH )	attr->mode |= HW_TO_CW(TOS_S_IROTH);
+  if( buf->st_mode & S_IWOTH )	attr->mode |= HW_TO_CW(TOS_S_IWOTH);
+  if( buf->st_mode & S_IXOTH )	attr->mode |= HW_TO_CW(TOS_S_IXOTH);
 
-  attr->index = htonl(buf->st_ino);
-  attr->dev = htons(buf->st_dev);
-  attr->nlink = htons(buf->st_nlink);
-  attr->uid = htons(buf->st_uid);
-  attr->gid = htons(buf->st_gid);
-  attr->size = htonl(buf->st_size);
-  attr->blksize = htonl(buf->st_blksize);
-  attr->nblocks = htonl(buf->st_blocks);
+  attr->index = HL_TO_CL(buf->st_ino);
+  attr->dev = HW_TO_CW(buf->st_dev);
+  attr->nlink = HW_TO_CW(buf->st_nlink);
+  fprintf(stderr, "st_nlink = 0x%x nlink = 0x%x\n", buf->st_nlink, attr->nlink);
+  attr->uid = HW_TO_CW(buf->st_uid);
+  attr->gid = HW_TO_CW(buf->st_gid);
+  attr->size = HL_TO_CL(buf->st_size);
+  attr->blksize = HL_TO_CL(buf->st_blksize);
+  attr->nblocks = HL_TO_CL(buf->st_blocks);
   unix_time_to_tos( &attr->mtime, &attr->mdate, buf->st_mtime );
   unix_time_to_tos( &attr->atime, &attr->adate, buf->st_atime );
   unix_time_to_tos( &attr->ctime, &attr->cdate, buf->st_ctime );
 
   if( S_ISDIR( buf->st_mode ) ) {
-    attr->attr = htons(TOS_ATTRIB_DIRECTORY);
+    attr->attr = HW_TO_CW(TOS_ATTRIB_DIRECTORY);
   }
   else {
     attr->attr = 0;

@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <time.h>
 
+#include "client_endian.h"
 #include "div.h"
 #include "prototypes.h"
 #include "toserrors.h"
@@ -434,8 +435,8 @@ void unix_time_to_tos( short *dest_time, short *dest_date, time_t src_time )
   tdate |= (ltime->tm_mon + 1) << 5;
   tdate |= ltime->tm_mday;
 
-  *dest_time = htons(ttime);
-  *dest_date = htons(tdate);
+  *dest_time = HW_TO_CW(ttime);
+  *dest_date = HW_TO_CW(tdate);
 }
 
 
