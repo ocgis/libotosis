@@ -114,7 +114,7 @@ char *gemdos_call_retv[] = {
   "%ld", "%02x", "#%08lx", "%d", "%d", "%d %s",
   "#%08lx", "%d", "%d", "%lx", "", NULL,
   "%d", "%d", NULL, NULL, NULL, NULL,
-  NULL, NULL, "%d", "%d %{DOSTIME}", NULL, NULL,
+  NULL, NULL, "%d", "#%d %{DOSTIME}", NULL, NULL,
   NULL, NULL, "%d"
 };
 #endif
