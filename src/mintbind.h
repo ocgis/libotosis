@@ -1,7 +1,7 @@
 /*
-** gemdosbind.h
+** mintbind.h
 **
-** Copyright 1999 Christer Gustavsson <cg@nocrew.org>
+** Copyright 1999 - 2001 Christer Gustavsson <cg@nocrew.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -15,7 +15,12 @@
 #ifndef _MINTBIND_H_
 #define _MINTBIND_H_
 
+#ifndef PACKED /* FIXME for non GNU compilers */
+#define PACKED __attribute__((packed))
+#endif /* PACKED */
+
 #include <gemdosbind.h>
+
 
 /* MiNT modes for Pexec */
 #  define	PE_ASYNC_LOADGO	   100	       /* load and asynchronously go */
@@ -129,6 +134,7 @@ struct __ploadinfo {
 /* Socket ioctls: these require MiNT-Net 3.0 (or later) */
 
 /* socket-level I/O control calls */
+/*
 #define SIOCGLOWAT	(('S' << 8) | 1)
 #define SIOCSLOWAT	(('S' << 8) | 2)
 #define SIOCGHIWAT	(('S' << 8) | 3)
@@ -136,6 +142,7 @@ struct __ploadinfo {
 #define SIOCSPGRP	(('S' << 8) | 5)
 #define SIOCGPGRP	(('S' << 8) | 6)
 #define SIOCATMARK	(('S' << 8) | 7)
+*/
 
 /* socket configuration controls */
 #define SIOCGIFCONF	(('S' << 8) | 12)	/* get iface list */
@@ -164,7 +171,8 @@ struct __ploadinfo {
 #define SIOCSARP	(('S' << 8) | 42)	/* set ARP table entry */
 
 /* Structure used by Fxattr() */
-typedef struct {
+typedef struct
+{
   unsigned short mode;		/* File type and access permissions */
   long index;			/* Inode */
   unsigned short dev;		/* Bios device */
@@ -185,21 +193,23 @@ typedef struct {
   short reserved2;		/* Reserved */
   long reserved3;		/* Reserved */
   long reserved4;		/* Reserved */
-} _XATTR;
+} PACKED _XATTR;
 
 /* Structure used by Pmsg() */
-typedef struct {
+typedef struct
+{
   long userlong1;		/* User message */
   long userlong2;		/* User message */
   short pid;			/* pid of reader or writer */
-} _PMSG;
+} PACKED _PMSG;
 
 /* Structure used by Psigaction() */
-typedef struct {
+typedef struct
+{
   long sa_handler;
   short sa_mask;
   short sa_flags;
-} _SIGACTION;
+} PACKED _SIGACTION;
 
 /* Alternative structure names, according to Atari Compendium */
 typedef _XATTR XATTR;
@@ -270,6 +280,5 @@ void Salert(char *);
 void Syield(void);
 long Sysconf(short);
 long Talarm(long);
-
 
 #endif /* _MINTBIND_H_ */

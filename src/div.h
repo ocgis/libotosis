@@ -5,7 +5,7 @@
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
  *  Copyright 1998 Tomas Berndtsson <tomas@nocrew.org>
- *  Copyright 1998 - 2000 Christer Gustavsson <cg@nocrew.org>
+ *  Copyright 1998 - 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,10 @@
 
 #ifndef DIV_H
 #define DIV_H
+
+#ifndef PACKED /* FIXME for non GNU compilers */
+#define PACKED __attribute__((packed))
+#endif /* PACKED */
 
 #include <sys/types.h>
 #include <dirent.h>
@@ -53,7 +57,7 @@ typedef struct {
   SInt16 datrec;		/* starting sector of data */
   SInt16 numcl;			/* clusters per disk */
   SInt16 bflags;		/* bit 0: 1 = 16-bit, 0 = 12 bit */
-} Bpb;
+} PACKED Bpb;
 
 typedef struct {
   UInt16 mode;			/* File type and access permissions */
@@ -76,7 +80,7 @@ typedef struct {
   SInt16 reserved2;		/* Reserved */
   SInt32 reserved3;		/* Reserved */
   SInt32 reserved4;		/* Reserved */
-} Xattr;
+} PACKED Xattr;
 
 typedef struct
 {
@@ -103,7 +107,7 @@ typedef struct {
   UInt32   gen;            /* file generation number */
   
   SInt32   res[7];         /* sizeof = 128 bytes */
-} Stat;
+} PACKED Stat;
 
 
 typedef Xattr XATTR;
@@ -131,13 +135,13 @@ typedef struct {
   SInt32  msg1;			/* User message */
   SInt32  msg2;			/* User message */
   SInt16 pid;			/* pid of reader or writer */
-} PMSG;
+} PACKED PMSG;
 
 typedef struct {
   SInt32 handler;
   SInt16 mask;
   SInt16 flags;
-} SIGACTION;
+} PACKED SIGACTION;
 
 /*
  *  Pexec start modes
