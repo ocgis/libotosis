@@ -4,6 +4,7 @@
  *
  *  Copyright (C) 1991, 1992  Linus Torvalds, Lars Wirzenius
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +25,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <netinet/in.h>
+
+#include "div.h"
 
 /* all only if DEBUG defined */
 #ifdef DEBUG
@@ -447,7 +451,7 @@ static void single_arg( const char *format, char **nformat,
 		prefix = postfix = "\"";
 		*nfmt++ = 's';
 		*(char **)(*nargpp)++ = (char *)*oargpp;
-		fprintf(stdout, "%s,", *oargpp);
+		fprintf(stdout, "%s,", *oargpp++);
 	}
 	else {
 		*nfmt++ = *fmt;
@@ -456,36 +460,36 @@ static void single_arg( const char *format, char **nformat,
 		 * push it onto new_args array */
 		if (is_quart) {
 			if (is_signed)
-				*(int *)(*nargpp)++ = *((signed char *)(*oargpp))++;
+				*(int *)(*nargpp)++ = *((signed char *)(*oargpp));
 			else
-				*(unsigned *)(*nargpp)++ = *((unsigned char *)(*oargpp))++;
+				*(unsigned *)(*nargpp)++ = *((unsigned char *)(*oargpp));
 
 			if (is_signed)
-			  fprintf(stdout, "%c,", *((signed char *)*oargpp));
+			  fprintf(stdout, "%c,", *((signed char *)*oargpp)++);
 			else
-			  fprintf(stdout, "%c,", *((unsigned char *)*oargpp));
+			  fprintf(stdout, "%c,", *((unsigned char *)*oargpp)++);
 		}
 		if (is_short) {
 			if (is_signed)
-				*(int *)(*nargpp)++ = *((short *)(*oargpp))++;
+				*(int *)(*nargpp)++ = *((short *)(*oargpp));
 			else
-				*(unsigned *)(*nargpp)++ = *((unsigned short *)(*oargpp))++;
+				*(unsigned *)(*nargpp)++ = *((unsigned short *)(*oargpp));
 
 			if (is_signed)
-			  fprintf(stdout, "%hu,", *((signed short *)*oargpp));
+			  fprintf(stdout, "%hu,", ntohs(*((signed short *)(*oargpp))++));
 			else
-			  fprintf(stdout, "%hd,", *((unsigned short *)*oargpp));
+			  fprintf(stdout, "%hd,", ntohs(*((unsigned short *)(*oargpp))++));
 		}
 		else {
 			if (is_signed)
-				*(long *)(*nargpp)++ = *((long *)(*oargpp))++;
+				*(long *)(*nargpp)++ = (*((long *)(*oargpp)));
 			else
-				*(unsigned long *)(*nargpp)++ = *((unsigned long *)(*oargpp))++;
+				*(unsigned long *)(*nargpp)++ = *((unsigned long *)(*oargpp));
 
 			if (is_signed)
-			  fprintf(stdout, "%lu,", *((signed long *)*oargpp));
+			  fprintf(stdout, "%lu,", ntohl(*((signed long *)(*oargpp))++));
 			else
-			  fprintf(stdout, "%ld,", *((unsigned long *)*oargpp));
+			  fprintf(stdout, "%ld,", ntohl(*((unsigned long *)(*oargpp))++));
 		}
 	}
 	*nfmt = 0;
@@ -538,6 +542,8 @@ static void print_TOS_retval( const char *fmt, const char *argp, long rv )
 		rv = (long)tos_errno_names[-rv];
 		did_translate = 1;
 	}
+
+    rv = htonl(rv);
 
 	/* Special hack for %D and %T formats (16-bit values!) */
 	if (*fmt == '%' && (fmt[1] == 'D' || fmt[1] == 'T')) rv <<= 16;
