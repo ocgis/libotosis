@@ -1,30 +1,46 @@
 /* Gemdos prototypes */
 
-void    Pterm0( void );
-long    Cconin( void );
-void    Cconout( int c );
-int     Cauxin( void );
-void    Cauxout( int c );
-int     Cprnout( int c );
-long    Crawio( int w );
-long    Crawcin( void );
-long    Cnecin( void );
-int     Cconws( const char *buf );
+calls:
+  void    Pterm0( void );
+tests:
+  all :-)
+
+calls:
+  long    Cconin( void );
+  void    Cconout( int c );
+  int     Cauxin( void );
+  void    Cauxout( int c );
+  int     Cprnout( int c );
+  long    Crawio( int w );
+  long    Crawcin( void );
+  long    Cnecin( void );
+  int     Cconws( const char *buf );
+tests:
+  none
+
 void    Cconrs( LINE *buf );
-int     Cconis( void );
-long    Dsetdrv( int drv );
-int     Cconos( void );
-int     Cprnos( void );
-int     Cauxis( void );
-int     Cauxos( void );
-int     Dgetdrv( void );
+
+calls:
+  int     Cconis( void );
+  long    Dsetdrv( int drv );
+  int     Cconos( void );
+  int     Cprnos( void );
+  int     Cauxis( void );
+  int     Cauxos( void );
+  int     Dgetdrv( void );
+tests:
+  none
 
 calls:
   void    Fsetdta( _DTA *buf );
 tests:
-  fsfirstnext
+  fsfirstnext1
 
-long    Super( void *stack );
+calls:
+  long    Super( void *stack );
+tests:
+  none
+
 unsigned int  Tgetdate( void );
 unsigned int  Tsetdate( unsigned int date );
 unsigned int  Tgettime( void );
@@ -58,7 +74,7 @@ calls:
   int     Fsfirst( const char *filename, int attr );
   int     Fsnext( void );
 tests:
-  fsfirstnext
+  fsfirstnext1
 
 int     Frename( int zero, const char *oldname, const char *newname );
 int     Fdatime( _DOSTIME *timeptr, int handle, int wflag );
@@ -158,8 +174,12 @@ int     EsetSmear( int swtch );
 /* MiNT */
 int Syield( void );				/* GEMDOS 0xff */
 int Fpipe( short *ptr );			/* GEMDOS 0x100 */
-long Fcntl( int f, long arg, int cmd);		/* GEMDOS 0x104 */
-#define Fcntl(f, arg, cmd) Fcntl(f, (long)(arg), cmd)
+
+calls:
+  long Fcntl( int f, long arg, int cmd);		/* GEMDOS 0x104 */
+tests:
+  fcntl1 (FSTAT, FSTAT64)
+
 long Finstat( int f );				/* GEMDOS 0x105 */
 long Foutstat( int f );				/* GEMDOS 0x106 */
 long Fgetchar(int f, int mode);			/* GEMDOS 0x107 */
@@ -202,7 +222,12 @@ long Drewinddir( long dir );			/* GEMDOS 0x12a */
 #define Drewinddir(dir) Drewinddir((long)(dir))
 long Dclosedir( long dir );			/* GEMDOS 0x12b */
 #define Dclosedir(dir) Dclosedir((long)(dir))
-long Fxattr( int flag, char *name, void *buf );	/* GEMDOS 0x12c */
+
+calls:
+  long Fxattr( int flag, char *name, void *buf );	/* GEMDOS 0x12c */
+tests:
+  fxattr1
+
 long Flink( char *oldname, char *newname );	/* GEMDOS 0x12d */
 long Fsymlink( char *oldname, char *newname );	/* GEMDOS 0x12e */
 long Freadlink( int siz, char *buf, char *name); /*GEMDOS 0x12f */
