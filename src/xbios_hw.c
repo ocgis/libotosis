@@ -51,7 +51,54 @@ XBIOS_UNIMP(Midiws);
 XBIOS_UNIMP(Mfpint);
 XBIOS_UNIMP(Iorec);
 XBIOS_UNIMP(Rsconf);
-XBIOS_UNIMP(Keytbl);
+
+#define KT_NOCHANGE ((char *)-1)
+
+static
+char
+kt_unshift[128];
+
+static
+char
+kt_shift[128];
+
+static
+char
+kt_caps[128];
+
+static
+char *
+keytabs[] =
+{
+  kt_unshift,
+  kt_shift,
+  kt_caps
+};
+
+XBIOSFUNC(Keytbl)
+{
+  TOSARG(char *, unshift);
+  TOSARG(char *, shift);
+  TOSARG(char *, caps);
+
+  if(unshift != KT_NOCHANGE)
+  {
+    keytabs[0] = unshift;
+  }
+
+  if(shift != KT_NOCHANGE)
+  {
+    keytabs[1] = shift;
+  }
+
+  if(caps != KT_NOCHANGE)
+  {
+    keytabs[2] = caps;
+  }
+
+  return keytabs;
+}
+
 XBIOS_UNIMP(Random);
 XBIOS_UNIMP(Protobt);
 XBIOS_UNIMP(Flopver);
