@@ -257,13 +257,14 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 	char new_format[256], *nfmt = new_format;
 	char sfmt[64];
 	int cnt = 0;
-	
+
 	nargp = new_args;
 
 	/* Parse the format to know about number and type of arguments */
 	for( p = fmt; *p; ++p ) {
 		if (*p != '%') {
 			*nfmt++ = *p;
+            fprintf(stdout, "%c", *p);
 			continue;
 		}
 		if (!*++p) break;
@@ -467,18 +468,18 @@ static void single_arg(const char *format,
 		if (is_short)
         {
 			if (is_signed)
-			  fprintf(stdout, "%hu,", ntohs(*((signed short *)(*oargpp))++));
+			  fprintf(stdout, format, ntohs(*((signed short *)(*oargpp))++));
 			else
-			  fprintf(stdout, "%hd,", ntohs(*((unsigned short *)(*oargpp))++));
+			  fprintf(stdout, format, ntohs(*((unsigned short *)(*oargpp))++));
 		}
 		else
         {
 			if (is_signed)
 			  fprintf(stdout,
-                      "%lu,",
+                      format,
                       (long)ntohl(*((signed long *)(*oargpp))++));
 			else
-			  fprintf(stdout, "%d,", ntohl(*((unsigned long *)(*oargpp))++));
+			  fprintf(stdout, format, ntohl(*((unsigned long *)(*oargpp))++));
 		}
 	}
 
