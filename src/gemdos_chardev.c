@@ -4,7 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
- *  Copyright 2000 Christer Gustavsson <cg@nocrew.org>
+ *  Copyright 2000 - 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <string.h>
+#include <time.h>
 #include <fcntl.h>
 
 #include "div.h"
