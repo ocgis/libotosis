@@ -200,8 +200,8 @@ TOSSTRUCT TOS_structures[] = {
 
 static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp, long
                          *extra_arg, int ffs );
-static void single_arg( const char *format, char **nformat, const void
-                        **oargpp, unsigned long **nargpp );
+static void single_arg(const char *format,
+                       const void **oargpp);
 static TOSSTRUCT *find_struct( const char *name );
 static void print_TOS_retval( const char *fmt, const char *argp, long rv );
 
@@ -303,7 +303,7 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 					*nfmt++ = '=';
 
 					carg = (const void *)(struct_p + comp->offset);
-					single_arg( comp->format, &nfmt, &carg, &nargp );
+					single_arg( comp->format, &carg);
 
 					if (i != struc->n_components-1)
 						*nfmt++ = ' ';
@@ -333,12 +333,11 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 					*(char **)nargp++ = *(char **)extra_arg;
 				}
 				else
-					single_arg( sfmt, &nfmt, (const void **)&extra_arg,
-								&nargp );
+					single_arg(sfmt, (const void **)&extra_arg);
 				extra_arg = NULL;
 			}
 			else
-				single_arg( sfmt, &nfmt, &oargp, &nargp );
+				single_arg(sfmt, &oargp);
 		}
 	}
 	*nfmt = 0;
@@ -371,17 +370,16 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
  *    structures containing char arrays)
  */
 
-static void single_arg( const char *format, char **nformat,
-						const void **oargpp, unsigned long **nargpp )
+static void single_arg(const char *format,
+                       const void **oargpp)
 {
 	const char *fmt = format;
 	int is_short = 0, is_quart = 0, is_signed = 0, is_date = 0, is_time = 0,
 		is_direct_str = 0, do_skip = 0;
 	static char date_str[32], time_str[32];
-	char new_format[64], *nfmt = new_format;
 	char *prefix = NULL, *postfix = NULL;
 
-	*nfmt++ = *fmt++; /* copy '%' */
+	fmt++; /* Skip '%' */
 	for( ; *fmt; ++fmt ) {
 		if (isdigit(*fmt) || *fmt == '-')
 			;
@@ -420,75 +418,61 @@ static void single_arg( const char *format, char **nformat,
 					 *fmt );
 			rexit( 1 );
 		}
-		*nfmt++ = *fmt;
 	}
+
+    if(prefix != NULL)
+    {
+      fprintf(stdout, prefix);
+    }
 
 	if (is_date)
     {
 		unsigned date = CW_TO_HW(*((unsigned short *)(*oargpp))++);
-		/* change 'D' into 's' */
-		*nfmt++ = 's';
+
 		sprintf( date_str, "%02d.%02d.%d",
 				 date & 0x1f, (date >> 5) & 0x0f,
 				 ((date >> 9) & 0x7f) + 1980 );
 		fprintf(stdout, "%s,", date_str);
-		*(char **)(*nargpp)++ = date_str;
 	}
 	else if (is_time)
     {
 		unsigned time = CW_TO_HW(*((unsigned short *)(*oargpp))++);
-		/* change 'T' into 's' */
-		*nfmt++ = 's';
+
 		sprintf( time_str, "%02d:%02d:%02d",
 				 (time >> 11) & 0x1f, (time >> 5) & 0x3f,
 				 (time & 0x1f) * 2 );
 		fprintf(stdout, "%s,", time_str);
-		*(char **)(*nargpp)++ = time_str;
 	}
 	else if (do_skip) {
 		/* new format empty -> print nothing */
-		nfmt = new_format;
 		*oargpp += is_quart ? 1 : is_short ? 2 : 4;
 	}
 	else if (is_direct_str) {
 		prefix = postfix = "\"";
-		*nfmt++ = 's';
-		*(char **)(*nargpp)++ = (char *)*oargpp;
+
 		fprintf(stdout, "%s,", (char *)*oargpp++);
 	}
-	else {
-		*nfmt++ = *fmt;
-
+	else
+    {
 		/* get the argument with correct width, do correct sign extend and
 		 * push it onto new_args array */
-		if (is_quart) {
-			if (is_signed)
-				*(int *)(*nargpp)++ = *((signed char *)(*oargpp));
-			else
-				*(unsigned *)(*nargpp)++ = *((unsigned char *)(*oargpp));
-
+		if (is_quart)
+        {
 			if (is_signed)
 			  fprintf(stdout, "%c,", *((signed char *)*oargpp)++);
 			else
 			  fprintf(stdout, "%c,", *((unsigned char *)*oargpp)++);
 		}
-		if (is_short) {
-			if (is_signed)
-				*(int *)(*nargpp)++ = *((short *)(*oargpp));
-			else
-				*(unsigned *)(*nargpp)++ = *((unsigned short *)(*oargpp));
 
+		if (is_short)
+        {
 			if (is_signed)
 			  fprintf(stdout, "%hu,", ntohs(*((signed short *)(*oargpp))++));
 			else
 			  fprintf(stdout, "%hd,", ntohs(*((unsigned short *)(*oargpp))++));
 		}
-		else {
-			if (is_signed)
-				*(long *)(*nargpp)++ = (*((long *)(*oargpp)));
-			else
-				*(unsigned long *)(*nargpp)++ = *((unsigned long *)(*oargpp));
-
+		else
+        {
 			if (is_signed)
 			  fprintf(stdout,
                       "%lu,",
@@ -497,18 +481,11 @@ static void single_arg( const char *format, char **nformat,
 			  fprintf(stdout, "%d,", ntohl(*((unsigned long *)(*oargpp))++));
 		}
 	}
-	*nfmt = 0;
-	
-	if (prefix) {
-		strcpy( *nformat, prefix );
-		*nformat += strlen(prefix);
-	}
-	strcpy( *nformat, new_format );
-	*nformat += strlen(new_format);
-	if (postfix) {
-		strcpy( *nformat, postfix );
-		*nformat += strlen(postfix);
-	}
+
+    if(postfix != NULL)
+    {
+      fprintf(stdout, postfix);
+    }
 }
 
 
