@@ -28,8 +28,6 @@
 #define HAVE_INT64		1
 
 #if HAVE_INT64
-typedef unsigned long long UInt64;
-typedef signed long long SInt64;
 #define VAL64(X)		(X ## LL)
 #define UVAL64(X)		(X ## ULL)
 #endif
