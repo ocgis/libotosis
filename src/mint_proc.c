@@ -26,6 +26,8 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/resource.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <sys/sem.h>
@@ -57,7 +59,11 @@ MINTFUNC(Syield)
 MINT_UNIMP(Fpipe);
 MINT_UNIMP(Fgetchar);
 MINT_UNIMP(Fputchar);
-MINT_UNIMP(Pwait);
+
+MINTFUNC(Pwait)
+{
+  return Pwait3(TOS_PW_STOPPED, NULL);  
+}
 
 MINTFUNC(Pnice)
 {
@@ -190,11 +196,60 @@ MINTFUNC(Pfork)
   return pid;
 }
 
-MINT_UNIMP(Pwait3);
+MINTFUNC(Pwait3)
+{
+  TOSARG(short, flag);
+  TOSARG(long *, rusage);
+  pid_t retpid;
+  int status, options;
+  long retvalue;
+  struct rusage unix_rusage;
+
+  options = (flag & TOS_PW_NOBLOCK) ? WNOHANG : 0;
+  options |= (flag & TOS_PW_STOPPED) ? WUNTRACED : 0;
+
+  if( (retpid = wait3(&status, options, &unix_rusage)) == -1 ) {
+    return 0;
+  }
+
+  retvalue = retpid << 16;
+  if(WIFSIGNALED(status)) {
+    retvalue |= (WTERMSIG(status) << 8) & 0xffff;
+  } else if(options & WUNTRACED && WIFSTOPPED(status)) {
+    retvalue |= (WSTOPSIG(status) << 8 | 0x007f) & 0xffff;
+  } else if(WIFEXITED(status)) {
+    retvalue |= WEXITSTATUS(status) & 0xffff;
+  }
+
+  if(rusage != NULL) {
+    rusage[0] = (unix_rusage.ru_utime.tv_sec * 1000 +
+		 unix_rusage.ru_utime.tv_usec / 1000);
+    rusage[1] = (unix_rusage.ru_stime.tv_sec * 1000 +
+		 unix_rusage.ru_stime.tv_usec / 1000);
+  }
+
+  return retvalue;  
+}
+
 MINT_UNIMP(Fselect);
 MINT_UNIMP(Prusage);
 MINT_UNIMP(Psetlimit);
-MINT_UNIMP(Talarm);
+
+/* It's probably better to use get-/setitimer() for this,
+ * but this will do for now. It's easier.
+ */
+MINTFUNC(Talarm)
+{
+  TOSARG(long, time);
+
+  if(time < 0) {
+    /* Can't simulate this with alarm(). */
+    return 0;
+  }
+
+  return alarm(time * 1000) / 1000;
+}
+
 MINT_UNIMP(Pause);
 
 MINTFUNC(Sysconf)
@@ -469,7 +524,39 @@ MINTFUNC(Pgetegid)
   return getegid();
 }
 
-MINT_UNIMP(Pwaitpid);
+MINTFUNC(Pwaitpid)
+{
+  TOSARG(short, pid);
+  TOSARG(short, flag);
+  TOSARG(long *, rusage);
+  pid_t retpid;
+  int status, options;
+  long retvalue;
+
+  options = (flag & TOS_PW_NOBLOCK) ? WNOHANG : 0;
+  options |= (flag & TOS_PW_STOPPED) ? WUNTRACED : 0;
+  
+  if( (retpid = waitpid(pid, &status, options)) == -1 ) {
+    return 0;
+  }
+  
+  retvalue = retpid << 16;
+  if(WIFSIGNALED(status)) {
+    retvalue |= (WTERMSIG(status) << 8) & 0xffff;
+  } else if(options & WUNTRACED && WIFSTOPPED(status)) {
+    retvalue |= (WSTOPSIG(status) << 8 | 0x007f) & 0xffff;
+  } else if(WIFEXITED(status)) {
+    retvalue |= WEXITSTATUS(status) & 0xffff;
+  }
+    
+  if(rusage != NULL) {
+    rusage[0] = 0;
+    rusage[1] = 0;
+  }
+
+  return retvalue;  
+}
+
 MINT_UNIMP(Salert);
 
 /* Local Variables:              */
