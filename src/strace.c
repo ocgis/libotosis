@@ -373,7 +373,6 @@ static void single_arg(const char *format,
 	const char *fmt = format;
 	int is_short = 0, is_quart = 0, is_signed = 0, is_date = 0, is_time = 0,
 		is_direct_str = 0, do_skip = 0;
-	static char date_str[32], time_str[32];
 	char *prefix = NULL, *postfix = NULL;
 
 	fmt++; /* Skip '%' */
@@ -424,21 +423,23 @@ static void single_arg(const char *format,
 
 	if (is_date)
     {
-		unsigned date = CW_TO_HW(*((unsigned short *)(*oargpp))++);
+		unsigned date;
 
-		sprintf( date_str, "%02d.%02d.%d",
-				 date & 0x1f, (date >> 5) & 0x0f,
-				 ((date >> 9) & 0x7f) + 1980 );
-		fprintf(stdout, "%s,", date_str);
+        date = CW_TO_HW(*((unsigned short *)(*oargpp))++);
+
+		fprintf(stdout, "%02d.%02d.%d",
+                date & 0x1f, (date >> 5) & 0x0f,
+                ((date >> 9) & 0x7f) + 1980 );
 	}
 	else if (is_time)
     {
-		unsigned time = CW_TO_HW(*((unsigned short *)(*oargpp))++);
+		unsigned time;
 
-		sprintf( time_str, "%02d:%02d:%02d",
-				 (time >> 11) & 0x1f, (time >> 5) & 0x3f,
-				 (time & 0x1f) * 2 );
-		fprintf(stdout, "%s,", time_str);
+        time = CW_TO_HW(*((unsigned short *)(*oargpp))++);
+
+		fprintf(stdout, "%02d:%02d:%02d",
+                (time >> 11) & 0x1f, (time >> 5) & 0x3f,
+                (time & 0x1f) * 2 );
 	}
 	else if (do_skip) {
 		/* new format empty -> print nothing */
@@ -522,10 +523,19 @@ static void print_TOS_retval( const char *fmt, const char *argp, long rv )
 		did_translate = 1;
 	}
 
-    rv = htonl(rv);
+    rv = HL_TO_CL(rv);
 
 	/* Special hack for %D and %T formats (16-bit values!) */
-	if (*fmt == '%' && (fmt[1] == 'D' || fmt[1] == 'T')) rv <<= 16;
+	if(*fmt == '%' && ((fmt[1] == 'D') || (fmt[1] == 'T')))
+    {
+      UInt16 * rvP;
+
+      rvP = (UInt16 *)&rv;
+
+      rvP[0] = rvP[1];
+      rvP[1] = 0;
+    }
+
 	tos_vfprintf( stderr, fmt, argp, &rv, did_translate );
 }
 
