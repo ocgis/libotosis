@@ -204,9 +204,21 @@ MINTFUNC(Fcntl)
       return translate_error( errno );
     }
     return TOS_E_OK;
-  
-  case TOS_F_GETFL: printf( "  unimp F_GETFL\n" ); return TOS_EINVFN;
-  case TOS_F_SETFL: printf( "  unimp F_SETFL\n" ); return TOS_EINVFN;
+
+  case TOS_F_GETFL:
+    DDEBUG( "  F_GETFL\n" );
+    if( (ret = fcntl( unix_handle, F_GETFL )) == -1 ) {
+      return translate_error( errno );
+    }
+    return ret;
+
+  case TOS_F_SETFL:
+    DDEBUG( "  G_SETFL\n" );
+    if( fcntl( unix_handle, F_SETFL, arg2 ) == -1 ) {
+      return translate_error( errno );
+    }
+    return TOS_E_OK;
+
   case TOS_F_GETLK: printf( "  unimp F_GETLK\n" ); return TOS_EINVFN;
   case TOS_F_SETLK: printf( "  unimp F_SETLK\n" ); return TOS_EINVFN;
   case TOS_F_SETLKW: printf( "  unimp F_SETLKW\n" ); return TOS_EINVFN;
