@@ -29,10 +29,7 @@
 /*void sigill_handler( int, int, struct sigcontext_struct * );*/
 /* defined in tos.c */
 void setup_sysvars( void );
-void setup_drivemap( void );
 void print_usage( void );
-void rexit( int code ) __attribute__ ((noreturn));
-/* void rexit( int code ); */
 
 /* trap handler */
 /*void sigsegv_handler( int, int, struct sigcontext_struct * );*/
@@ -46,13 +43,10 @@ void print_version( void );
 int dispatch_hwreg_emu( ulong, int, int, ulong * );
 
 /* terminal functions */
-void setup_tty( void );
 void restore_tty( void );
 void switch_tty_mode( void );
 
 /* memory functions */
-void *mymalloc( size_t );
-void *myrealloc( void *, size_t );
 char *mystrdup( const char * );
 
 /* functions for the file handling emulation */
@@ -79,7 +73,6 @@ int resolve_tos_file( char *, char * );
 void read_configuration( void );
 int read_config_file( const char *filename );
 int parse_config_entry( const char *line );
-int set_option_val( OPTION *op, const char *strval, int errmsg );
 
 /* strace.c */
 void strace_begin( const char *call_name, const char *call_format,

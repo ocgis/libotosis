@@ -4,6 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,9 +79,6 @@ GEMDOSFUNC(Fsnext);
 GEMDOSFUNC(Frename);
 GEMDOSFUNC(Fdatime);
 GEMDOSFUNC(Flock);
-
-unsigned long dispatch_gemdos( char * );
-void init_gemdos( void );
 
 /* utility functions */
 long ioready( int fd, int mode );

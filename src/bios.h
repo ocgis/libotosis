@@ -4,6 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,9 +45,6 @@ long internal_Bconin( int dev );
 long internal_Bconout( int dev, int c );
 long internal_Bcostat( int dev );
 void init_biosdev_fd( void );
-
-unsigned long dispatch_bios( char * );
-void init_bios( void );
 
 #endif
 

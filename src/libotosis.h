@@ -123,8 +123,25 @@ typedef struct {
 */
 
 TosProgram * new_program(void);
+void setup_drivemap(void);
+void init_bios(void);
+void init_gemdos(void);
+unsigned long dispatch_bios(char *);
+unsigned long dispatch_gemdos(char *);
+unsigned long dispatch_xbios( char * );
+void rexit(int code) __attribute__ ((noreturn));
 
 /* Executable loader */
 TosProgram * load_tos_program(char *);
+
+/* Load configuration */
+void read_configuration(void);
+
+/* Memory functions */
+void * mymalloc(size_t);
+void * myrealloc(void *, size_t);
+
+/* Terminal functions */
+void setup_tty(void);
 
 #endif __LIBOTOSIS_H__

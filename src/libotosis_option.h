@@ -3,6 +3,7 @@
  *  oTOSis - TOS emulator for Linux/68K
  *
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +44,8 @@ extern OPTION Options[];
 
 /* include defines for options */
 #include <libotosis_optiondef.h>
+
+int set_option_val(OPTION * op, const char * strval, int errmsg);
 
 #endif  /* _option_h */
 
