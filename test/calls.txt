@@ -48,7 +48,12 @@ unsigned int  Tsettime( unsigned int time );
 _DTA    *Fgetdta( void );
 int     Sversion( void );
 void    Ptermres( long keepcnt, int retcode );
-int     Dfree( _DISKINFO *buf, int driveno );
+
+calls:
+  int     Dfree( _DISKINFO *buf, int driveno );
+tests:
+  dfree1
+
 int     Dcreate( const char *path );
 int     Ddelete( const char *path );
 int     Dsetpath( const char *path );
