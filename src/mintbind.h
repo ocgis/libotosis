@@ -206,9 +206,9 @@ typedef struct
 /* Structure used by Psigaction() */
 typedef struct
 {
-  long sa_handler;
-  short sa_mask;
-  short sa_flags;
+  long  handler;
+  short mask;
+  short flags;
 } PACKED _SIGACTION;
 
 /* Alternative structure names, according to Atari Compendium */

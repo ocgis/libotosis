@@ -38,12 +38,13 @@
 #include "toserrors.h"
 #include "gemdos.h"
 #include "mint.h"
+#include "mintbind.h"
 #include "fd.h"
 
-void stat_to_xattr( Xattr *, struct stat * );
-void stat_to_stat( Stat *, struct stat * );
+static void stat_to_xattr(XATTR *, struct stat *);
+static void stat_to_stat(Stat *, struct stat *);
 
-extern TosProgram *prog;
+extern TosProgram * prog;
 
 MINTFUNC(Finstat)
 {
@@ -125,7 +126,7 @@ MINTFUNC(Fxattr)
 {
   TOSARG(short,flag);
   TOSARG(char *,name);
-  TOSARG(Xattr *,attr);
+  TOSARG(XATTR *,attr);
   struct stat buf;
   static char new_fname[ 1024 ];
   int retcode;
@@ -235,7 +236,7 @@ MINTFUNC(Fcntl)
       DDEBUG( "  fstat failed: %s\n", strerror( errno ) );
       return translate_error( retcode );
     }
-    stat_to_xattr( (Xattr *)arg2, &buf );
+    stat_to_xattr((XATTR *)arg2, &buf);
     return TOS_E_OK;
 
     /* I don't know if this should be made in a different
@@ -429,12 +430,15 @@ MINTFUNC(Dchroot)
 #else
 MINT_UNIMP(Dchroot);
 #endif
+
 /*
  *  Converts the contents of a stat buffer ot an Xattr structure
  *
  */
-
-void stat_to_xattr( Xattr *attr, struct stat *buf )
+static
+void
+stat_to_xattr(XATTR *       attr,
+              struct stat * buf)
 { 
   if( S_ISCHR( buf->st_mode ) )	attr->mode = HW_TO_CW(TOS_S_IFCHR);
   if( S_ISDIR( buf->st_mode ) )	attr->mode = HW_TO_CW(TOS_S_IFDIR);
@@ -473,6 +477,7 @@ void stat_to_xattr( Xattr *attr, struct stat *buf )
 }
 
 /* Used for Fcntl(FSTAT64) */
+static
 void stat_to_stat( Stat *attr, struct stat *buf )
 { 
   UInt32 mode;

@@ -4,6 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,9 +44,6 @@ void print_version( void );
 
 /* hardware register emulator */
 int dispatch_hwreg_emu( ulong, int, int, ulong * );
-
-/* exec loader */
-TosProgram *load_tos_program( char * );
 
 /* terminal functions */
 void setup_tty( void );

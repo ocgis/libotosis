@@ -1,7 +1,7 @@
 /*
 ** xbiosbind.h
 **
-** Copyright 1999 Christer Gustavsson <cg@nocrew.org>
+** Copyright 1999 - 2001 Christer Gustavsson <cg@nocrew.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -51,15 +51,15 @@ typedef struct {
 
 /* Structure returned by Kbdvbase() */
 typedef struct {
-    void    (*midivec)	__PROTO((void));
-    void    (*vkbderr)	__PROTO((void));
-    void    (*vmiderr)	__PROTO((void));
-    void    (*statvec)	__PROTO((void *));
-    void    (*mousevec)	__PROTO((void *));
-    void    (*clockvec)	__PROTO((void *));
-    void    (*joyvec)	__PROTO((void *));
-    long    (*midisys)	__PROTO((void));
-    long    (*ikbdsys)	__PROTO((void));
+    void    (*midivec)	(void);
+    void    (*vkbderr)	(void);
+    void    (*vmiderr)	(void);
+    void    (*statvec)	(void *);
+    void    (*mousevec)	(void *);
+    void    (*clockvec)	(void *);
+    void    (*joyvec)	(void *);
+    long    (*midisys)	(void);
+    long    (*ikbdsys)	(void);
     char    kbstate;
 } _KBDVECS;
 

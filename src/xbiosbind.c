@@ -3,6 +3,7 @@
  *  oTOSis - TOS emulator for Linux/68K
  *
  *  Copyright 1998 Tomas Berndtsson <tomas@nocrew.org>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,21 +22,10 @@
  ************************************************************************/
 
 #include "div.h"
-#include "xbios.h"
 #include "bindproto.h"
+#include "xbios.h"
+#include "xbiosbind.h"
 
-typedef void voidfunc(void);
-typedef long longfunc(void);
-
-/* Fine.. I'm lazy, so sue me! */
-#define SBUFPTR void
-#define DSPBLOCK void
-#define IOREC void
-#define KBDVECS void
-#define KEYTAB void
-#define METAINFO void
-#define PRTBLK void
-#define RGB void
 
 bindproto1(xbios,long,Bconmap,0x2c,short);
 bindproto0v(xbios,Bioskeys,0x18);

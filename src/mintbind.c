@@ -3,6 +3,7 @@
  *  oTOSis - TOS emulator for Linux/68K
  *
  *  Copyright 1998 Tomas Berndtsson <tomas@nocrew.org>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +22,10 @@
  ************************************************************************/
 
 #include "div.h"
-#include "mint.h"
-#include "bindproto.h"
 
-typedef void voidfuncl(long);
+#include "mint.h"
+#include "mintbind.h"
+#include "bindproto.h"
 
 bindproto1(mint,long,Dchroot,0x14a,char *);
 bindproto1(mint,long,Dclosedir,0x12b,long);

@@ -59,29 +59,6 @@ typedef struct {
   SInt16 bflags;		/* bit 0: 1 = 16-bit, 0 = 12 bit */
 } PACKED Bpb;
 
-typedef struct {
-  UInt16 mode;			/* File type and access permissions */
-  SInt32 index;			/* Inode */
-  UInt16 dev;			/* Bios device */
-  UInt16 reserved1;		/* Reserved */
-  UInt16 nlink;			/* Number of links */
-  UInt16 uid;			/* uid */
-  UInt16 gid;			/* gid */
-  SInt32 size;			/* File size in bytes */
-  SInt32 blksize;		/* Block size */
-  SInt32 nblocks;		/* Blocks used by file*/
-  SInt16 mtime;			/* Time of last modification */
-  SInt16 mdate;			/* Date of last modification */
-  SInt16 atime;			/* Time of last access */
-  SInt16 adate;			/* Date of last access */
-  SInt16 ctime;			/* Time of file creation */
-  SInt16 cdate;			/* Date of file creation */
-  SInt16 attr;			/* Standard file attributes */
-  SInt16 reserved2;		/* Reserved */
-  SInt32 reserved3;		/* Reserved */
-  SInt32 reserved4;		/* Reserved */
-} PACKED Xattr;
-
 typedef struct
 {
   long    high_time;
@@ -110,8 +87,6 @@ typedef struct {
 } PACKED Stat;
 
 
-typedef Xattr XATTR;
-
 typedef struct {
   UInt32 b_free;		/* Number of free clusters */
   UInt32 b_total;		/* Total number of clusters on the drive */
@@ -130,18 +105,6 @@ typedef struct {
   DIR *dir_pointer;		/* Pointer to DIR structure */
   int mode;			/* mode, 0 = long filenames, 1 = TOS */
 } DopendirDirContext;
-
-typedef struct {
-  SInt32  msg1;			/* User message */
-  SInt32  msg2;			/* User message */
-  SInt16 pid;			/* pid of reader or writer */
-} PACKED PMSG;
-
-typedef struct {
-  SInt32 handler;
-  SInt16 mask;
-  SInt16 flags;
-} PACKED SIGACTION;
 
 /*
  *  Pexec start modes

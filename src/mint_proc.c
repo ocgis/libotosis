@@ -3,6 +3,7 @@
  *  oTOSis - TOS emulator for Linux/68K
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +34,7 @@
 #include <sys/sem.h>
 
 #include "div.h"
+#include "mintbind.h"
 #include "prototypes.h"
 #include "toserrors.h"
 #include "mint.h"

@@ -2,7 +2,7 @@
  *
  *  oTOSis - TOS emulator for Linux/68K
  *
- *  Copyright 1999 Christer Gustavsson <cg@nocrew.org>
+ *  Copyright 1999 - 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -112,10 +112,19 @@ typedef struct {
 } Cookie;
 
 /*
- *  Program flags
- */
+**  Program flags
+*/
 #define TOS_PRGFLAG_FASTLOAD		0x01
 #define TOS_PRGFLAG_LOAD_TTRAM		0x02
 #define TOS_PRGFLAG_MALLOC_TTRAM	0x04
+
+/*
+**  Routines
+*/
+
+TosProgram * new_program(void);
+
+/* Executable loader */
+TosProgram * load_tos_program(char *);
 
 #endif __LIBOTOSIS_H__

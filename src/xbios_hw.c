@@ -30,8 +30,8 @@
 
 #include "div.h"
 #include "prototypes.h"
-#include "xbios.h"
 #include "toserrors.h"
+#include "xbios.h"
 
 extern TosProgram *prog;
 
@@ -96,7 +96,7 @@ XBIOSFUNC(Keytbl)
     keytabs[2] = caps;
   }
 
-  return keytabs;
+  return (SInt32)keytabs;
 }
 
 XBIOS_UNIMP(Random);

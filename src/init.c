@@ -2,7 +2,7 @@
  *
  *  oTOSis - TOS emulator for Linux/68K
  *
- *   *  Copyright 1999 Christer Gustavsson <cg@nocrew.org>
+ *  Copyright 1999 - 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <unistd.h>
 
 #include "div.h"
-#include "init.h"
 #include "prototypes.h"
 
 extern TosProgram * prog;
