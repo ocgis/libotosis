@@ -27,6 +27,7 @@
 #include <ctype.h>
 #include <netinet/in.h>
 
+#include "client_endian.h"
 #include "div.h"
 #include "prototypes.h"
 
@@ -291,7 +292,7 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 			else
 				struct_p = *((const char **)oargp)++;
 
-            struct_p = ntohl(struct_p);
+            struct_p = (const char *)CL_TO_HL((UInt32)struct_p);
 
 			if ((struc = find_struct( sfmt ))) {
 				*nfmt++ = '{';
@@ -422,8 +423,9 @@ static void single_arg( const char *format, char **nformat,
 		*nfmt++ = *fmt;
 	}
 
-	if (is_date) {
-		unsigned date = *((unsigned short *)(*oargpp))++;
+	if (is_date)
+    {
+		unsigned date = CW_TO_HW(*((unsigned short *)(*oargpp))++);
 		/* change 'D' into 's' */
 		*nfmt++ = 's';
 		sprintf( date_str, "%02d.%02d.%d",
@@ -432,8 +434,9 @@ static void single_arg( const char *format, char **nformat,
 		fprintf(stdout, "%s,", date_str);
 		*(char **)(*nargpp)++ = date_str;
 	}
-	else if (is_time) {
-		unsigned time = *((unsigned short *)(*oargpp))++;
+	else if (is_time)
+    {
+		unsigned time = CW_TO_HW(*((unsigned short *)(*oargpp))++);
 		/* change 'T' into 's' */
 		*nfmt++ = 's';
 		sprintf( time_str, "%02d:%02d:%02d",
