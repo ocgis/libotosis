@@ -1,4 +1,4 @@
-CFLAGS = @CFLAGS@ -Wall
+CFLAGS = @CFLAGS@ -Wall -DDEBUG
 
 osisdir = @OSISINCLUDE@
 osis_HEADERS = \
@@ -30,7 +30,7 @@ xgemdos_sources = \
 
 common_sources = \
 	file_emu.c init.c init.h malloc.c optfile.c optiondef.c \
-	scancode_us.c tty.c
+	scancode_us.c tty.c strace.c
 
 common_headers = \
 	bindproto.h div.h fd.h memory.h prototypes.h \
