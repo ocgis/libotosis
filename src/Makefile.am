@@ -4,7 +4,7 @@ osisdir = @OSISINCLUDE@
 osis_HEADERS = \
 	biosbind.h gemdosbind.h mintbind.h xbiosbind.h \
 	libotosis.h libotosis_option.h libotosis_optiondef.h \
-	libotosis_sysvars.h 
+	libotosis_sysvars.h lineabind.h
 
 lib_LTLIBRARIES = libotosis.la
 
@@ -18,6 +18,9 @@ gemdos_sources = \
 
 hwreg_sources = \
 	hwreg_dispatch.c
+
+linea_sources = \
+	linea.c
 
 mint_sources = \
 	mint.h mint_dispatch.c mint_file.c mint_proc.c mintbind.c
@@ -42,6 +45,7 @@ libotosis_la_SOURCES = \
 	${bios_sources} \
 	${gemdos_sources} \
 	${hwreg_sources} \
+	${linea_sources} \
 	${mint_sources} \
 	${xbios_sources} \
 	${common_sources} \
