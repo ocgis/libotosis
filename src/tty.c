@@ -40,7 +40,7 @@
 #include "div.h"
 #include "version.h"
 #include "prototypes.h"
-#include "sysvars.h"
+#include "libotosis_sysvars.h"
 #include "traps.h"
 #include "bios.h"
 #include "xbios.h"

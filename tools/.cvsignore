@@ -1,5 +1,5 @@
-Makefile
 .deps
 .libs
-make_scancode
+Makefile
 Makefile.in
+make_scancode

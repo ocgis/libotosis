@@ -2,7 +2,7 @@
 BEGIN {
 	OFS = "";
 	print "#include <stdio.h> /* for definition of NULL */\n\n";
-	print "#include <option.h>\n";
+	print "#include <libotosis_option.h>\n";
 	print "\nOPTION Options[] = {";
 	num = 0;
 }

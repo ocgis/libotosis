@@ -7,8 +7,8 @@ test -z "$srcdir" && srcdir=.
 ORIGDIR=`pwd`
 cd $srcdir
 
-PROJECT=otosis
-FILE=src/tos.c
+PROJECT=libotosis
+FILE=src/mintbind.h
 
 (libtoolize --version) < /dev/null > /dev/null 2>&1 || {
 	echo

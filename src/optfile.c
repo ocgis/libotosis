@@ -48,7 +48,7 @@
 
 #include "div.h"
 #include "prototypes.h"
-#include "option.h"
+#include "libotosis_option.h"
 
 char *TosPrgName = "";
 

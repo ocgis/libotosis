@@ -1,6 +1,11 @@
-Makefile.in
+*.la
+*.lo
 *.o
-tos
-Makefile
 .deps
 .libs
+Makefile
+Makefile.in
+libotosis_optiondef.h
+optiondef.c
+scancode_us.c
+tos

@@ -29,7 +29,7 @@
 #include "prototypes.h"
 #include "gemdos.h"
 #include "toserrors.h"
-#include "option.h"
+#include "libotosis_option.h"
 
 /*
  *  Some kind of memory allocation control should be possible,
