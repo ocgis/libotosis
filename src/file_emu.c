@@ -3,7 +3,7 @@
  *  oTOSis - TOS emulator for Linux/68K
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
- *  Copyright 2000 Christer Gustavsson <cg@nocrew.org>
+ *  Copyright 2000 - 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -434,8 +434,8 @@ void unix_time_to_tos( short *dest_time, short *dest_date, time_t src_time )
   tdate |= (ltime->tm_mon + 1) << 5;
   tdate |= ltime->tm_mday;
 
-  *dest_time = ttime;
-  *dest_date = tdate;
+  *dest_time = htons(ttime);
+  *dest_date = htons(tdate);
 }
 
 
