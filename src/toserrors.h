@@ -61,6 +61,7 @@
 #define TOS_EPLFMT	-66	/* Invalid program load format */
 #define TOS_EGSBF	-67	/* Memory block growth failure */
 #define TOS_ELOOP	-80	/* Too many symbolic links */
+#define TOS_EIO		-90	/* I/O error */
 #define TOS_EMOUNT	-200	/* Mount point crossed */
 
 #define	LAST_TOS_ERRNO	-200
