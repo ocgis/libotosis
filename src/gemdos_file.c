@@ -4,7 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
- *  Copyright 2000 Christer Gustavsson <cg@nocrew.org>
+ *  Copyright 2000 - 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,16 +22,17 @@
  *
  ************************************************************************/
 
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <fnmatch.h>
+#include <netinet/in.h>
 #include <stdio.h>
 #include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <dirent.h>
-#include <fnmatch.h>
-#include <errno.h>
+#include <sys/types.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "memory.h"
 #include "div.h"
@@ -458,7 +459,6 @@ GEMDOSFUNC(Fsnext)
     char full_file_name[1024];
 
     a = 0;
-
     if((e = readdir( find_info.dir_pointer )) == NULL)
     {
       return TOS_ENMFIL;
@@ -512,9 +512,9 @@ GEMDOSFUNC(Fsnext)
   }
 
   prog->dta->d_attrib = a;
-  prog->dta->d_time = 0;
-  prog->dta->d_date = 0;
-  prog->dta->d_length = fstat.st_size;
+  prog->dta->d_time = htons(0);  /* FIXME */
+  prog->dta->d_date = htons(0);  /* FIXME */
+  prog->dta->d_length = htonl(fstat.st_size);
   unix_to_tos_file_short( fname, e->d_name );
   strcpy( prog->dta->d_fname, fname );
 
@@ -749,7 +749,7 @@ SInt32 getfd( SInt32 *fd )
 SInt32 new_handle( void )
 
 {	int	i;
-	
+
 	for( i = GEMDOS_FIRST_NONSTD; i < MAX_GEMDOS_FD; ++i )
 		if (IS_FREE_HANDLE(FdMap[i])) break;
 	if (i == MAX_GEMDOS_FD)
