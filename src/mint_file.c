@@ -376,6 +376,7 @@ MINTFUNC(Dpathconf)
   }
 }
 
+#if 0
 MINTFUNC(Dchroot)
 {
   TOSARG(char *,path);
@@ -405,7 +406,9 @@ MINTFUNC(Dchroot)
 
   return TOS_E_OK;
 }
-
+#else
+MINT_UNIMP(Dchroot);
+#endif
 /*
  *  Converts the contents of a stat buffer ot an Xattr structure
  *
