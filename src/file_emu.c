@@ -47,7 +47,10 @@ TosProgram * prog = NULL;
 
 int translate_error( int err )
 {
-  switch( err ){
+  switch(err)
+  {
+  case EEXIST:
+    return TOS_EACCDN; /* At least true for Dcreate */
   case EPERM:
     return TOS_EACCDN;
   case ENOENT:
