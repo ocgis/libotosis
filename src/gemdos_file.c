@@ -4,6 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2000 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -539,12 +540,13 @@ GEMDOSFUNC(Frename)
 
 GEMDOSFUNC(Fdatime)
 {
-  TOSARG(Datetime *,timeptr);
+  TOSARG(UInt32 *,timeptr);
   TOSARG(SInt16,fd);
   TOSARG(SInt16,flag);
-  int handle = fd;
+  int         handle = fd;
   struct stat buf;
-  struct tm *ltime;
+  struct tm * ltime;
+  UInt16      ttimedate;
 
   GETFD( handle );
   if (handle < 0)
@@ -555,12 +557,16 @@ GEMDOSFUNC(Fdatime)
       return translate_error( errno );
     }
     ltime = localtime( &buf.st_mtime );
-    timeptr->hour = ltime->tm_hour;
-    timeptr->minute = ltime->tm_min;
-    timeptr->second = ltime->tm_sec / 2;
-    timeptr->year = ltime->tm_year - 80;
-    timeptr->month = ltime->tm_mon + 1;
-    timeptr->day = ltime->tm_mday;
+
+    ttimedate = ltime->tm_hour << 27;
+    ttimedate |= ltime->tm_min << 21;
+    ttimedate |= (ltime->tm_sec / 2) << 16;
+    ttimedate |= (ltime->tm_year - 80) << 9;
+    ttimedate |= (ltime->tm_mon + 1) << 5;
+    ttimedate |= ltime->tm_mday;
+
+    *timeptr = ttimedate;
+
     return TOS_E_OK;
   }
   else if( flag == 1 ){

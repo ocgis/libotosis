@@ -42,14 +42,6 @@
 
 #define ARG_USED(x)		(void)(x)
 
-typedef struct {
-  unsigned int hour:5;
-  unsigned int minute:6;
-  unsigned int second:5;
-  unsigned int year:7;
-  unsigned int month:4;
-  unsigned int day:5;
-} Datetime;
 
 typedef struct {
   SInt16 recsiz;		/* bytes per sector */

@@ -23,6 +23,7 @@
 #include "div.h"
 #include "gemdos.h"
 #include "bindproto.h"
+#include "gemdosbind.h"
 
 
 bindproto0(gemdos,short,Cauxin,0x03);
@@ -42,7 +43,7 @@ bindproto0(gemdos,long,Crawcin,0x07);
 bindproto1(gemdos,long,Crawio,0x06,short);
 bindproto1(gemdos,long,Dcreate,0x39,char *);
 bindproto1(gemdos,long,Ddelete,0x3a,char *);
-bindproto2(gemdos,long,Dfree,0x36,Diskinfo *,short);
+bindproto2(gemdos,long,Dfree,0x36,DISKINFO *,short);
 bindproto0(gemdos,short,Dgetdrv,0x19);
 bindproto2(gemdos,long,Dgetpath,0x47,char *,short);
 bindproto1(gemdos,long,Dsetdrv,0x0e,short);
@@ -50,17 +51,17 @@ bindproto1(gemdos,long,Dsetpath,0x3b,char *);
 bindproto3(gemdos,long,Fattrib,0x43,char *,short,short);
 bindproto1(gemdos,long,Fclose,0x3e,short);
 bindproto2(gemdos,long,Fcreate,0x3c,char *,short);
-bindproto3(gemdos,long,Fdatime,0x57,Datetime *,short,short);
+bindproto3(gemdos,long,Fdatime,0x57,DATETIME *,short,short);
 bindproto1(gemdos,long,Fdelete,0x41,char *);
 bindproto1(gemdos,long,Fdup,0x45,short);
 bindproto2(gemdos,long,Fforce,0x46,short,short);
-bindproto0(gemdos,Dta *,Fgetdta,0x2f);
+bindproto0(gemdos,DTA *,Fgetdta,0x2f);
 bindproto4(gemdos,long,Flock,0x5c,short,short,long,long);
 bindproto2(gemdos,long,Fopen,0x3d,char *,short);
 bindproto3(gemdos,long,Fread,0x3f,short,long,void *);
 bindproto3(gemdos,long,Frename,0x56,short,char *,char *);
 bindproto3(gemdos,long,Fseek,0x42,long,short,short);
-bindproto1v(gemdos,Fsetdta,0x1a,Dta *);
+bindproto1v(gemdos,Fsetdta,0x1a,DTA *);
 bindproto2(gemdos,short,Fsfirst,0x4e,char *,short);
 bindproto0(gemdos,short,Fsnext,0x4f);
 bindproto3(gemdos,long,Fwrite,0x40,short,long,void *);
