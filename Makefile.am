@@ -1,4 +1,4 @@
-SUBDIRS = tools src
+SUBDIRS = tools src mint_portab
 
 bin_SCRIPTS = otosis-config
 
