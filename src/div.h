@@ -223,6 +223,13 @@ typedef struct {
 #define TOS_SHMSETBLK		0x4D01
 
 /*
+ *  MiNT Pwait* flags
+ */
+
+#define TOS_PW_NOBLOCK		0x01
+#define TOS_PW_STOPPED		0x02
+
+/*
  *  MiNT Pmsg commands
  */
 
