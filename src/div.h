@@ -78,6 +78,34 @@ typedef struct {
   SInt32 reserved4;		/* Reserved */
 } Xattr;
 
+typedef struct
+{
+  long    high_time;
+  long    time;           /* This has to be signed!  */
+  ulong   mikroseconds;
+} StatTime;
+
+typedef struct {
+  UInt64   dev;            /* inode's device */
+  UInt32   ino;            /* inode's number */
+  UInt32   mode;           /* inode protection mode */
+  UInt32   nlink;          /* number of hard links */
+  UInt32   uid;            /* user ID of the file's owner */
+  UInt32   gid;            /* group ID of the file's group */
+  UInt64   rdev;           /* device type */
+  StatTime atime;          /* time of last access, UTC */
+  StatTime mtime;          /* time of last data modification, UTC */
+  StatTime ctime;          /* time of last file status change, UTC */
+  UInt64   size;           /* file size, in bytes */
+  UInt64   blocks;         /* blocks allocated for file */
+  UInt32   blksize;        /* optimal blocksize for I/O */
+  UInt32   flags;          /* user defined flags for file */
+  UInt32   gen;            /* file generation number */
+  
+  SInt32   res[7];         /* sizeof = 128 bytes */
+} Stat;
+
+
 typedef Xattr XATTR;
 
 typedef struct {
@@ -158,6 +186,18 @@ typedef struct {
 #define TOS_S_IFLNK		0xE000
 
 /*
+ *  Tos Fcntl(FSTAT64) file type flags
+ */
+#define TOS_S_IFSOCK_64		0010000
+#define TOS_S_IFCHR_64		0020000
+#define TOS_S_IFDIR_64		0040000
+#define TOS_S_IFBLK_64		0060000
+#define TOS_S_IFREG_64		0100000
+#define TOS_S_IFIFO_64		0120000
+#define TOS_S_IMEM_64		0140000
+#define TOS_S_IFLNK_64		0160000
+
+/*
  *  TOS Fcntl commands
  */
 #define TOS_F_DUPFD		0x0000
@@ -171,6 +211,7 @@ typedef struct {
 #define TOS_FSTAT		0x4600
 #define TOS_FIONREAD		0x4601
 #define TOS_FIONWRITE		0x4602
+#define TOS_FSTAT64		0x4606
 #define TOS_TIOCGETP		0x5400
 #define TOS_TIOCSETP		0x5401
 #define TOS_TIOCGETC		0x5402
