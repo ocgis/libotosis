@@ -54,7 +54,11 @@ calls:
 tests:
   dfree1
 
-int     Dcreate( const char *path );
+calls:
+  int     Dcreate( const char *path );
+tests:
+  dcreate1
+
 int     Ddelete( const char *path );
 int     Dsetpath( const char *path );
 long    Fcreate( const char *filename, int attr );
@@ -103,7 +107,12 @@ long    Rwabs( int rwflag, void *buf, int cnt, int recnr, int dev );
 void    (*Setexc( int number, void (*exchdlr)() )) ();
 #define Setexc(number, exchdlr)	Setexc(number, (void(*)())(exchdlr))
 long    Tickcal( void );
-_BPB    *Getbpb( int dev );
+
+calls:
+  _BPB    *Getbpb( int dev );
+tests:
+  FIXME
+
 long    Bcostat( int dev );
 long    Mediach( int dev );
 long    Drvmap( void );
@@ -131,7 +140,12 @@ void    Midiws( int cnt, void *ptr );
 void    Mfpint( int erno, void (*vector)() );
 _IOREC   *Iorec( int dev );
 long    Rsconf( int baud, int ctr, int ucr, int rsr, int tsr, int scr );
-_KEYTAB  *Keytbl( void *unshift, void *shift, void *capslock );
+
+calls:
+  _KEYTAB  *Keytbl( void *unshift, void *shift, void *capslock );
+tests:
+  FIXME
+
 long    Random( void );
 void    Protobt( void *buf, long serialno, int disktype, int execflag );
 int     Flopver( void *buf, long filler, int devno, int sectno,
@@ -208,7 +222,12 @@ long Pusrval(long arg);				/* GEMDOS 0x118 */
 int Pdomain(int newdom);			/* GEMDOS 0x119 */
 void Psigreturn( void );			/* GEMDOS 0x11a */
 long Pfork( void );				/* GEMDOS 0x11b */
-long Pwait3(int flag, long *rusage);		/* GEMDOS 0x11c */
+
+calls:
+  long Pwait3(int flag, long *rusage);		/* GEMDOS 0x11c */
+tests:
+  FIXME
+
 int Fselect(unsigned int timeout, long *rfds, long *wfds, long *xfds); /* GEMDOS 0x11d */
 int Prusage( long r[8] );			/* GEMDOS 0x11e */
 long Psetlimit(int lim, long value);		/* GEMDOS 0x11f */
@@ -217,12 +236,21 @@ void Pause( void );				/* GEMDOS 0x121 */
 long Sysconf( int n );				/* GEMDOS 0x122 */
 long Psigpending( void );			/* GEMDOS 0x123 */
 long Dpathconf( const char *name, int n );	/* GEMDOS 0x124 */
-long Pmsg( int mode, long mbox, void *msg ); 	/* GEMDOS 0x125 */
+
+calls:
+  long Pmsg( int mode, long mbox, void *msg ); 	/* GEMDOS 0x125 */
+tests:
+  FIXME
+
 long Fmidipipe( int pid, int in, int out );	/* GEMDOS 0x126 */
 int Prenice( int pid, int delta );		/* GEMDOS 0x127 */
-long Dopendir( const char *name, int flag );	/* GEMDOS 0x128 */
-long Dreaddir( int buflen, long dir, char *buf); /*GEMDOS 0x129 */
-#define Dreaddir(buflen, dir, buf) Dreaddir(buflen, (long)(dir), buf)
+
+calls:
+  long Dopendir( const char *name, int flag );	/* GEMDOS 0x128 */
+  long Dreaddir( int buflen, long dir, char *buf); /*GEMDOS 0x129 */
+tests:
+  FIXME
+
 long Drewinddir( long dir );			/* GEMDOS 0x12a */
 #define Drewinddir(dir) Drewinddir((long)(dir))
 long Dclosedir( long dir );			/* GEMDOS 0x12b */
@@ -248,7 +276,12 @@ long Psigaction(int sig, long act, long oact);	/* GEMDOS 0x137 */
 	Psigaction(sig, (long)(act), (long)(oact))
 int Pgeteuid( void );				/* GEMDOS 0x138 */
 int Pgetegid( void );				/* GEMDOS 0x139 */
-long Pwaitpid(int pid, int flag, long *rusage);	/* GEMDOS 0x13a */
+
+calls:
+  long Pwaitpid(int pid, int flag, long *rusage);	/* GEMDOS 0x13a */
+tests:
+  FIXME
+
 long Dgetcwd(char *path, int drv, int size);	/* GEMDOS 0x13b */
 long Salert(char *msg);				/* GEMDOS 0x13c */
 
