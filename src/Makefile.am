@@ -33,7 +33,7 @@ xgemdos_sources = \
 
 common_sources = \
 	file_emu.c init.c init.h malloc.c optfile.c optiondef.c \
-	scancode_us.c tty.c strace.c
+	scancode_us.c tty.c strace.c trace.c
 
 common_headers = \
 	bindproto.h client_endian.h div.h fd.h memory.h prototypes.h \
