@@ -4,6 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -99,6 +100,8 @@ XBIOSFUNC(Supexec)
 			 /* all not-call-saved regs must be in clobbered
 			  * list! */
 			 "d0", "d1", "d2", "a0", "a1", "a2" );
+  #else
+  fprintf(stderr, "libotosis: Implement Supexec for this architecture!\n");
   #endif
   in_emu = 1;
   prog->super = saved_super;
