@@ -40,6 +40,8 @@
 #include "toserrors.h"
 #include "fd.h"
 
+#define TRUE 1
+
 extern TosProgram *prog;
 extern DirContext find_info;	/* Used for Fsfirst/Fsnext operation */
 
@@ -424,35 +426,50 @@ GEMDOSFUNC(Fsfirst)
   TOSARG(char *,filename);
   TOSARG(SInt16,mask);
   SIGSTACK_STATIC char tfname[ 1024 ], fname[ 1024 ];
-
   find_info.find_mask = mask;
   TOS_TO_UNIX( tfname, filename );
-  get_dirname( fname, tfname );
-  get_basename( find_info.file_mask, tfname );
-  if( find_info.dir_pointer != NULL ){
-    closedir( find_info.dir_pointer );
+  get_dirname(fname, tfname);
+  get_basename(find_info.file_mask, tfname);
+
+  if(find_info.dir_pointer != NULL)
+  {
+    closedir(find_info.dir_pointer);
   }
-  if( (find_info.dir_pointer = opendir( fname )) == NULL ){
-    return translate_error( errno );
+
+  if((find_info.dir_pointer = opendir(fname)) == NULL)
+  {
+    return translate_error(errno);
   }
-  return gemdos_Fsnext( NULL );
+  strcpy(find_info.directory, fname);
+
+  return gemdos_Fsnext(NULL);
 }
 
 GEMDOSFUNC(Fsnext)
 {
-  struct dirent *e;
-  SIGSTACK_STATIC char fname[ 14 ];
-  int a = 0;
-  struct stat fstat;
+  struct dirent *      e;
+  SIGSTACK_STATIC char fname[14];
+  struct stat          fstat;
+  int                  a;
 
-  do{
-    if( (e = readdir( find_info.dir_pointer )) == NULL ){
+  while(TRUE)
+  {
+    char full_file_name[1024];
+
+    a = 0;
+
+    if((e = readdir( find_info.dir_pointer )) == NULL)
+    {
       return TOS_ENMFIL;
     }
 
-    stat( e->d_name, &fstat );
+    sprintf(full_file_name, "%s/%s", find_info.directory, e->d_name);
 
-    if( S_ISDIR( fstat.st_mode ) ){
+    /* FIXME: stat _should_ be ok here, but what if not? */
+    stat(full_file_name, &fstat);
+
+    if(S_ISDIR(fstat.st_mode))
+    {
       a |= TOS_ATTRIB_DIRECTORY;
     }
 
@@ -472,9 +489,26 @@ GEMDOSFUNC(Fsnext)
 		a |= TOS_ATTRIB_READONLY;
       }
     }
-  }while( ((a & TOS_ATTRIB_READONLY) && !(find_info.find_mask & TOS_ATTRIB_READONLY)) ||
-	 (S_ISDIR( fstat.st_mode ) && !(find_info.find_mask & TOS_ATTRIB_DIRECTORY)) ||
-	 (fnmatch( find_info.file_mask, e->d_name, FNM_NOESCAPE ) != 0) );
+
+    if(((a & TOS_ATTRIB_READONLY) &&
+       (find_info.find_mask & TOS_ATTRIB_READONLY)) ||
+       ((find_info.find_mask & TOS_ATTRIB_READONLY) == 0))
+    {
+      if(a & TOS_ATTRIB_DIRECTORY)
+      {
+        if((find_info.find_mask & TOS_ATTRIB_DIRECTORY) &&
+           (strcmp(".", e->d_name) != 0) &&
+           (strcmp("..", e->d_name) != 0))
+        {
+          break;
+        }
+      }
+      else if(fnmatch(find_info.file_mask, e->d_name, FNM_NOESCAPE) == 0)
+      {
+        break;
+      }
+    }
+  }
 
   prog->dta->d_attrib = a;
   prog->dta->d_time = 0;
