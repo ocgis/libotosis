@@ -28,10 +28,16 @@
 #include <sys/types.h>
 #include <string.h>
 
+#include "client_endian.h"
 #include "div.h"
 #include "prototypes.h"
 #include "toserrors.h"
 #include "xbios.h"
+
+
+#define FALSE 0
+#define TRUE  1
+
 
 extern TosProgram *prog;
 
@@ -68,12 +74,9 @@ kt_caps[128];
 
 static
 char *
-keytabs[] =
-{
-  kt_unshift,
-  kt_shift,
-  kt_caps
-};
+keytabs[3];
+
+static int kt_inited = FALSE;
 
 XBIOSFUNC(Keytbl)
 {
@@ -81,19 +84,27 @@ XBIOSFUNC(Keytbl)
   TOSARG(char *, shift);
   TOSARG(char *, caps);
 
+  if(!kt_inited)
+  {
+    keytabs[0] = (char *)HL_TO_CL((UInt32)kt_unshift);
+    keytabs[1] = (char *)HL_TO_CL((UInt32)kt_shift);
+    keytabs[2] = (char *)HL_TO_CL((UInt32)kt_caps);
+    kt_inited = TRUE;
+  }
+
   if(unshift != KT_NOCHANGE)
   {
-    keytabs[0] = unshift;
+    keytabs[0] = (char *)HL_TO_CL((UInt32)unshift);
   }
 
   if(shift != KT_NOCHANGE)
   {
-    keytabs[1] = shift;
+    keytabs[1] = (char *)HL_TO_CL((UInt32)shift);
   }
 
   if(caps != KT_NOCHANGE)
   {
-    keytabs[2] = caps;
+    keytabs[2] = (char *)HL_TO_CL((UInt32)caps);
   }
 
   return (SInt32)keytabs;
