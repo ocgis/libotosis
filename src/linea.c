@@ -22,6 +22,7 @@
  *
  ************************************************************************/
 
+#include "client_endian.h"
 #include "lineabind.h"
 
 typedef struct
@@ -66,8 +67,8 @@ void
 linea0(void)
 {
   /* Just fake values for now */
-  linea.bottom._V_CEL_MX = 79;
-  linea.bottom._V_CEL_MY = 24;
-  linea.bottom._V_REZ_HZ = 640;
-  linea.bottom._V_REZ_VT = 480;
+  linea.bottom._V_CEL_MX = HW_TO_CW(79);
+  linea.bottom._V_CEL_MY = HW_TO_CW(24);
+  linea.bottom._V_REZ_HZ = HW_TO_CW(640);
+  linea.bottom._V_REZ_VT = HW_TO_CW(480);
 }
