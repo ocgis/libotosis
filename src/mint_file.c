@@ -3,6 +3,7 @@
  *  oTOSis - TOS emulator for Linux/68K
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
+ *  Copyright 2001 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +24,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <netinet/in.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -434,36 +436,36 @@ MINT_UNIMP(Dchroot);
 
 void stat_to_xattr( Xattr *attr, struct stat *buf )
 { 
-  if( S_ISCHR( buf->st_mode ) )	attr->mode = TOS_S_IFCHR;
-  if( S_ISDIR( buf->st_mode ) )	attr->mode = TOS_S_IFDIR;
-  if( S_ISREG( buf->st_mode ) )	attr->mode = TOS_S_IFREG;
-  if( S_ISFIFO( buf->st_mode ) ) attr->mode = TOS_S_IFIFO;
-  if( S_ISLNK( buf->st_mode ) )	attr->mode = TOS_S_IFLNK;
+  if( S_ISCHR( buf->st_mode ) )	attr->mode = htons(TOS_S_IFCHR);
+  if( S_ISDIR( buf->st_mode ) )	attr->mode = htons(TOS_S_IFDIR);
+  if( S_ISREG( buf->st_mode ) )	attr->mode = htons(TOS_S_IFREG);
+  if( S_ISFIFO( buf->st_mode ) ) attr->mode = htons(TOS_S_IFIFO);
+  if( S_ISLNK( buf->st_mode ) )	attr->mode = htons(TOS_S_IFLNK);
 
-  if( buf->st_mode & S_IRUSR )	attr->mode |= TOS_S_IRUSR;
-  if( buf->st_mode & S_IWUSR )	attr->mode |= TOS_S_IWUSR;
-  if( buf->st_mode & S_IXUSR )	attr->mode |= TOS_S_IXUSR;
-  if( buf->st_mode & S_IRGRP )	attr->mode |= TOS_S_IRGRP;
-  if( buf->st_mode & S_IWGRP )	attr->mode |= TOS_S_IWGRP;
-  if( buf->st_mode & S_IXGRP )	attr->mode |= TOS_S_IXGRP;
-  if( buf->st_mode & S_IROTH )	attr->mode |= TOS_S_IROTH;
-  if( buf->st_mode & S_IWOTH )	attr->mode |= TOS_S_IWOTH;
-  if( buf->st_mode & S_IXOTH )	attr->mode |= TOS_S_IXOTH;
+  if( buf->st_mode & S_IRUSR )	attr->mode |= htons(TOS_S_IRUSR);
+  if( buf->st_mode & S_IWUSR )	attr->mode |= htons(TOS_S_IWUSR);
+  if( buf->st_mode & S_IXUSR )	attr->mode |= htons(TOS_S_IXUSR);
+  if( buf->st_mode & S_IRGRP )	attr->mode |= htons(TOS_S_IRGRP);
+  if( buf->st_mode & S_IWGRP )	attr->mode |= htons(TOS_S_IWGRP);
+  if( buf->st_mode & S_IXGRP )	attr->mode |= htons(TOS_S_IXGRP);
+  if( buf->st_mode & S_IROTH )	attr->mode |= htons(TOS_S_IROTH);
+  if( buf->st_mode & S_IWOTH )	attr->mode |= htons(TOS_S_IWOTH);
+  if( buf->st_mode & S_IXOTH )	attr->mode |= htons(TOS_S_IXOTH);
 
-  attr->index = buf->st_ino;
-  attr->dev = buf->st_dev;
-  attr->nlink = buf->st_nlink;
-  attr->uid = buf->st_uid;
-  attr->gid = buf->st_gid;
-  attr->size = buf->st_size;
-  attr->blksize = buf->st_blksize;
-  attr->nblocks = buf->st_blocks;
+  attr->index = htonl(buf->st_ino);
+  attr->dev = htons(buf->st_dev);
+  attr->nlink = htons(buf->st_nlink);
+  attr->uid = htons(buf->st_uid);
+  attr->gid = htons(buf->st_gid);
+  attr->size = htonl(buf->st_size);
+  attr->blksize = htonl(buf->st_blksize);
+  attr->nblocks = htonl(buf->st_blocks);
   unix_time_to_tos( &attr->mtime, &attr->mdate, buf->st_mtime );
   unix_time_to_tos( &attr->atime, &attr->adate, buf->st_atime );
   unix_time_to_tos( &attr->ctime, &attr->cdate, buf->st_ctime );
 
   if( S_ISDIR( buf->st_mode ) ) {
-    attr->attr = TOS_ATTRIB_DIRECTORY;
+    attr->attr = htons(TOS_ATTRIB_DIRECTORY);
   }
   else {
     attr->attr = 0;
