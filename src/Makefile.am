@@ -1,4 +1,4 @@
-CFLAGS = @CFLAGS@ -Wall -DDEBUG
+CFLAGS = @CFLAGS@ -Wall
 
 osisdir = @OSISINCLUDE@
 osis_HEADERS = \
