@@ -4,6 +4,7 @@
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
+ *  Copyright 2000 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -285,35 +286,33 @@ GEMDOSFUNC(Cauxos)
 
 GEMDOSFUNC(Tgetdate)
 {
-  struct tm *ti;
-  time_t currtime;
-  Date tdate;
-  long ret;
+  struct tm * ti;
+  time_t      currtime;
+  UInt16      tdate;
 
   currtime = time( NULL );
   ti = localtime( &currtime );
-  tdate.year = ti->tm_year - 80;
-  tdate.month = ti->tm_mon + 1;
-  tdate.day = ti->tm_mday;
-  ret = *(short *)&tdate;
-  return ret;
+  tdate = (ti->tm_year - 80) << 9;
+  tdate |= (ti->tm_mon + 1) << 5;
+  tdate |= ti->tm_mday;
+  return tdate;
 }
 
 GEMDOS_UNIMP(Tsetdate);
 
 GEMDOSFUNC(Tgettime)
 {
-  struct tm *ti;
-  time_t currtime;
-  Time ttime;
-  long ret;
+  struct tm * ti;
+  time_t      currtime;
+  UInt16      ttime;
+  long        ret;
 
   currtime = time( NULL );
   ti = localtime( &currtime );
-  ttime.hour = ti->tm_hour;
-  ttime.minute = ti->tm_min;
-  ttime.second = ti->tm_sec;
-  ret = *(short *)&ttime;
+  ttime = ti->tm_hour << 11;
+  ttime |= ti->tm_min << 5;
+  ttime |= ti->tm_sec / 2;
+  ret = ttime;
   return ret;
 }
 

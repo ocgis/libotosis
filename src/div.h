@@ -5,7 +5,7 @@
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
  *  Copyright 1996 Roman Hodek <Roman.Hodek@informatik.uni-erlangen.de>
  *  Copyright 1998 Tomas Berndtsson <tomas@nocrew.org>
- *  Copyright 1998 Christer Gustavsson <cg@nocrew.org>
+ *  Copyright 1998 - 2000 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,18 +50,6 @@ typedef struct {
   unsigned int month:4;
   unsigned int day:5;
 } Datetime;
-
-typedef struct {
-  unsigned int hour:5;
-  unsigned int minute:6;
-  unsigned int second:5;
-} Time;  
-
-typedef struct {
-  unsigned int year:7;
-  unsigned int month:4;
-  unsigned int day:5;
-} Date;
 
 typedef struct {
   SInt16 recsiz;		/* bytes per sector */

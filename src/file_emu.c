@@ -3,6 +3,7 @@
  *  oTOSis - TOS emulator for Linux/68K
  *
  *  Copyright 1996 Elias Martenson <elias@omicron.se>
+ *  Copyright 2000 Christer Gustavsson <cg@nocrew.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -421,20 +422,20 @@ void get_dirname( char *dest, char *src )
 
 void unix_time_to_tos( short *dest_time, short *dest_date, time_t src_time )
 {
-  struct tm *ltime;
-  Time ttime;
-  Date tdate;
+  struct tm * ltime;
+  UInt16      ttime;
+  UInt16      tdate;
 
   ltime = localtime( &src_time );
-  ttime.hour = ltime->tm_hour;
-  ttime.minute = ltime->tm_min;
-  ttime.second = ltime->tm_sec / 2;
-  tdate.year = ltime->tm_year - 80;
-  tdate.month = ltime->tm_mon + 1;
-  tdate.day = ltime->tm_mday;
+  ttime = ltime->tm_hour << 11;
+  ttime |= ltime->tm_min << 5;
+  ttime |= ltime->tm_sec / 2;
+  tdate = (ltime->tm_year - 80) << 9;
+  tdate |= (ltime->tm_mon + 1) << 5;
+  tdate |= ltime->tm_mday;
 
-  *dest_time = *(short *)&ttime;
-  *dest_date = *(short *)&tdate;
+  *dest_time = ttime;
+  *dest_date = tdate;
 }
 
 
