@@ -39,6 +39,7 @@
 #include "fd.h"
 
 void stat_to_xattr( Xattr *, struct stat * );
+void stat_to_stat( Stat *, struct stat * );
 
 extern TosProgram *prog;
 
@@ -233,6 +234,23 @@ MINTFUNC(Fcntl)
       return translate_error( retcode );
     }
     stat_to_xattr( (Xattr *)arg2, &buf );
+    return TOS_E_OK;
+
+    /* I don't know if this should be made in a different
+     * way. There doesn't seem to be any special function
+     * fstat64() in Linux. 
+     */
+  case TOS_FSTAT64:
+    DDEBUG( "  FSTAT64\n" );
+    if( !IS_NONSTD_HANDLE( handle ) ) {
+      return TOS_EIHNDL;
+    }
+    if( fstat( unix_handle, &buf ) == -1 ) {
+      retcode = errno;
+      DDEBUG( "  fstat failed: %s\n", strerror( errno ) );
+      return translate_error( retcode );
+    }
+    stat_to_stat( (Stat *)arg2, &buf );
     return TOS_E_OK;
 
   case TOS_FIONREAD: printf( "  unimp FIONREAD\n" ); return TOS_EINVFN;
@@ -442,7 +460,7 @@ void stat_to_xattr( Xattr *attr, struct stat *buf )
   attr->nblocks = buf->st_blocks;
   unix_time_to_tos( &attr->mtime, &attr->mdate, buf->st_mtime );
   unix_time_to_tos( &attr->atime, &attr->adate, buf->st_atime );
-  unix_time_to_tos( &attr->atime, &attr->cdate, buf->st_ctime );
+  unix_time_to_tos( &attr->ctime, &attr->cdate, buf->st_ctime );
 
   if( S_ISDIR( buf->st_mode ) ) {
     attr->attr = TOS_ATTRIB_DIRECTORY;
@@ -450,6 +468,46 @@ void stat_to_xattr( Xattr *attr, struct stat *buf )
   else {
     attr->attr = 0;
   }
+}
+
+/* Used for Fcntl(FSTAT64) */
+void stat_to_stat( Stat *attr, struct stat *buf )
+{ 
+  if( S_ISCHR( buf->st_mode ) )	 attr->mode = TOS_S_IFCHR_64;
+  if( S_ISDIR( buf->st_mode ) )	 attr->mode = TOS_S_IFDIR_64;
+  if( S_ISREG( buf->st_mode ) )	 attr->mode = TOS_S_IFREG_64;
+  if( S_ISFIFO( buf->st_mode ) ) attr->mode = TOS_S_IFIFO_64;
+  if( S_ISLNK( buf->st_mode ) )	 attr->mode = TOS_S_IFLNK_64;
+  if( S_ISSOCK( buf->st_mode ) ) attr->mode = TOS_S_IFSOCK_64;
+  if( S_ISBLK( buf->st_mode ) )	 attr->mode = TOS_S_IFBLK_64;
+
+  if( buf->st_mode & S_IRUSR )	attr->mode |= TOS_S_IRUSR;
+  if( buf->st_mode & S_IWUSR )	attr->mode |= TOS_S_IWUSR;
+  if( buf->st_mode & S_IXUSR )	attr->mode |= TOS_S_IXUSR;
+  if( buf->st_mode & S_IRGRP )	attr->mode |= TOS_S_IRGRP;
+  if( buf->st_mode & S_IWGRP )	attr->mode |= TOS_S_IWGRP;
+  if( buf->st_mode & S_IXGRP )	attr->mode |= TOS_S_IXGRP;
+  if( buf->st_mode & S_IROTH )	attr->mode |= TOS_S_IROTH;
+  if( buf->st_mode & S_IWOTH )	attr->mode |= TOS_S_IWOTH;
+  if( buf->st_mode & S_IXOTH )	attr->mode |= TOS_S_IXOTH;
+
+  attr->ino = buf->st_ino;
+  attr->dev = buf->st_dev;
+  attr->nlink = buf->st_nlink;
+  attr->uid = buf->st_uid;
+  attr->gid = buf->st_gid;
+  attr->size = buf->st_size;
+  attr->blksize = buf->st_blksize;
+  attr->blocks = buf->st_blocks;
+  attr->mtime.high_time = 0;
+  attr->mtime.time = buf->st_mtime;
+  attr->mtime.mikroseconds = 0;
+  attr->atime.high_time = 0;
+  attr->atime.time = buf->st_atime;
+  attr->atime.mikroseconds = 0;
+  attr->ctime.high_time = 0;
+  attr->ctime.time = buf->st_ctime;
+  attr->ctime.mikroseconds = 0;
 }
 
 

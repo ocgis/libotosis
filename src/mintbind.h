@@ -29,6 +29,7 @@
 #define FIONWRITE	(('F'<< 8) | 2)
 #define FUTIME		(('F'<< 8) | 3)
 #define FTRUNCATE	(('F'<< 8) | 4)
+#define FSTAT64		(('F'<< 8) | 6)
 #define TIOCGPGRP	(('T'<< 8) | 6)
 #define TIOCSPGRP	(('T'<< 8) | 7)
 #define TIOCFLUSH	(('T'<< 8) | 8)
