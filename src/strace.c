@@ -28,9 +28,7 @@
 #include <netinet/in.h>
 
 #include "div.h"
-
-/* all only if DEBUG defined */
-#ifdef DEBUG
+#include "prototypes.h"
 
 /*
  * This global variable is set whenever the cursor is in the middle of the
@@ -451,7 +449,7 @@ static void single_arg( const char *format, char **nformat,
 		prefix = postfix = "\"";
 		*nfmt++ = 's';
 		*(char **)(*nargpp)++ = (char *)*oargpp;
-		fprintf(stdout, "%s,", *oargpp++);
+		fprintf(stdout, "%s,", (char *)*oargpp++);
 	}
 	else {
 		*nfmt++ = *fmt;
@@ -487,9 +485,11 @@ static void single_arg( const char *format, char **nformat,
 				*(unsigned long *)(*nargpp)++ = *((unsigned long *)(*oargpp));
 
 			if (is_signed)
-			  fprintf(stdout, "%lu,", ntohl(*((signed long *)(*oargpp))++));
+			  fprintf(stdout,
+                      "%lu,",
+                      (long)ntohl(*((signed long *)(*oargpp))++));
 			else
-			  fprintf(stdout, "%ld,", ntohl(*((unsigned long *)(*oargpp))++));
+			  fprintf(stdout, "%d,", ntohl(*((unsigned long *)(*oargpp))++));
 		}
 	}
 	*nfmt = 0;
@@ -549,8 +549,6 @@ static void print_TOS_retval( const char *fmt, const char *argp, long rv )
 	if (*fmt == '%' && (fmt[1] == 'D' || fmt[1] == 'T')) rv <<= 16;
 	tos_vfprintf( stderr, fmt, argp, &rv, did_translate );
 }
-
-#endif /* DEBUG */
 
 /* Local Variables: */
 /* tab-width: 4     */
