@@ -1,0 +1,15 @@
+CC = m68k-mint-gcc
+CFLAGS = -Wall -Wunused -Wmissing-prototypes
+
+PROGRAMS = fsfirstnext1 hello
+
+all: $(PROGRAMS)
+
+cpprogs: $(PROGRAMS)
+	cp $(PROGRAMS) ../m68kbin
+
+clean:
+	$(RM) *.o
+
+realclean: clean
+	$(RM) $(PROGRAMS)
