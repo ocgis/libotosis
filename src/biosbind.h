@@ -1,7 +1,7 @@
 /*
 ** biosbind.h
 **
-** Copyright 1999 Christer Gustavsson <cg@nocrew.org>
+** Copyright 1999 - 2001 Christer Gustavsson <cg@nocrew.org>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ typedef struct {
 typedef void voidfunc(void);
 
 long Bconin(short);
-long Bconout(short);
+long Bconout(short, short);
 long Bconstat(short);
 long Bcostat(short);
 unsigned long Drvmap(void);
