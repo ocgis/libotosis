@@ -1,0 +1,9 @@
+Makefile.in
+*.o
+*.lo
+*.la
+Makefile
+scancode_us.c
+optiondef.c
+.deps
+.libs
