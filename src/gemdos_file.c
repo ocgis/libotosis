@@ -475,34 +475,39 @@ GEMDOSFUNC(Fsnext)
     }
 
     /*  BUG: this routine should check the group file too */
-    if( fstat.st_uid == getuid() ){
-      if( (fstat.st_mode & S_IWUSR) == 0 ){
+    if( fstat.st_uid == getuid() )
+    {
+      if( (fstat.st_mode & S_IWUSR) == 0 )
+      {
 		a |= TOS_ATTRIB_READONLY;
       }
     }
-    else if( fstat.st_gid == getgid() ){
-      if( (fstat.st_mode & S_IWGRP) == 0 ){
+    else if( fstat.st_gid == getgid() )
+    {
+      if( (fstat.st_mode & S_IWGRP) == 0 )
+      {
 		a |= TOS_ATTRIB_READONLY;
       }
     }
-    else{
-      if( (fstat.st_mode & S_IWOTH) == 0 ){
+    else
+    {
+      if( (fstat.st_mode & S_IWOTH) == 0 )
+      {
 		a |= TOS_ATTRIB_READONLY;
       }
     }
 
-    if(((a & TOS_ATTRIB_READONLY) &&
-       (find_info.find_mask & TOS_ATTRIB_READONLY)) ||
-       ((find_info.find_mask & TOS_ATTRIB_READONLY) == 0))
+    if((a & find_info.find_mask &
+        (TOS_ATTRIB_READONLY | TOS_ATTRIB_DIRECTORY)) ||
+       ((a &
+         (TOS_ATTRIB_READONLY | TOS_ATTRIB_DIRECTORY)) == 0))
     {
-      if(a & TOS_ATTRIB_DIRECTORY)
+      if((a & TOS_ATTRIB_DIRECTORY) &&
+         ((strcmp(".", e->d_name) == 0) ||
+          (strcmp("..", e->d_name) == 0)))
       {
-        if((find_info.find_mask & TOS_ATTRIB_DIRECTORY) &&
-           (strcmp(".", e->d_name) != 0) &&
-           (strcmp("..", e->d_name) != 0))
-        {
-          break;
-        }
+        /* Do nothing... */
+        ;
       }
       else if(fnmatch(find_info.file_mask, e->d_name, FNM_NOESCAPE) == 0)
       {
