@@ -475,41 +475,45 @@ void stat_to_xattr( Xattr *attr, struct stat *buf )
 /* Used for Fcntl(FSTAT64) */
 void stat_to_stat( Stat *attr, struct stat *buf )
 { 
-  if( S_ISCHR( buf->st_mode ) )	 attr->mode = TOS_S_IFCHR_64;
-  if( S_ISDIR( buf->st_mode ) )	 attr->mode = TOS_S_IFDIR_64;
-  if( S_ISREG( buf->st_mode ) )	 attr->mode = TOS_S_IFREG_64;
-  if( S_ISFIFO( buf->st_mode ) ) attr->mode = TOS_S_IFIFO_64;
-  if( S_ISLNK( buf->st_mode ) )	 attr->mode = TOS_S_IFLNK_64;
-  if( S_ISSOCK( buf->st_mode ) ) attr->mode = TOS_S_IFSOCK_64;
-  if( S_ISBLK( buf->st_mode ) )	 attr->mode = TOS_S_IFBLK_64;
+  UInt32 mode;
 
-  if( buf->st_mode & S_IRUSR )	attr->mode |= TOS_S_IRUSR;
-  if( buf->st_mode & S_IWUSR )	attr->mode |= TOS_S_IWUSR;
-  if( buf->st_mode & S_IXUSR )	attr->mode |= TOS_S_IXUSR;
-  if( buf->st_mode & S_IRGRP )	attr->mode |= TOS_S_IRGRP;
-  if( buf->st_mode & S_IWGRP )	attr->mode |= TOS_S_IWGRP;
-  if( buf->st_mode & S_IXGRP )	attr->mode |= TOS_S_IXGRP;
-  if( buf->st_mode & S_IROTH )	attr->mode |= TOS_S_IROTH;
-  if( buf->st_mode & S_IWOTH )	attr->mode |= TOS_S_IWOTH;
-  if( buf->st_mode & S_IXOTH )	attr->mode |= TOS_S_IXOTH;
+  if( S_ISCHR( buf->st_mode ) )	 mode = TOS_S_IFCHR_64;
+  if( S_ISDIR( buf->st_mode ) )	 mode = TOS_S_IFDIR_64;
+  if( S_ISREG( buf->st_mode ) )	 mode = TOS_S_IFREG_64;
+  if( S_ISFIFO( buf->st_mode ) ) mode = TOS_S_IFIFO_64;
+  if( S_ISLNK( buf->st_mode ) )	 mode = TOS_S_IFLNK_64;
+  if( S_ISSOCK( buf->st_mode ) ) mode = TOS_S_IFSOCK_64;
+  if( S_ISBLK( buf->st_mode ) )	 mode = TOS_S_IFBLK_64;
 
-  attr->ino = buf->st_ino;
-  attr->dev = buf->st_dev;
-  attr->nlink = buf->st_nlink;
-  attr->uid = buf->st_uid;
-  attr->gid = buf->st_gid;
-  attr->size = buf->st_size;
-  attr->blksize = buf->st_blksize;
-  attr->blocks = buf->st_blocks;
-  attr->mtime.high_time = 0;
-  attr->mtime.time = buf->st_mtime;
-  attr->mtime.mikroseconds = 0;
-  attr->atime.high_time = 0;
-  attr->atime.time = buf->st_atime;
-  attr->atime.mikroseconds = 0;
-  attr->ctime.high_time = 0;
-  attr->ctime.time = buf->st_ctime;
-  attr->ctime.mikroseconds = 0;
+  if( buf->st_mode & S_IRUSR )	mode |= TOS_S_IRUSR;
+  if( buf->st_mode & S_IWUSR )	mode |= TOS_S_IWUSR;
+  if( buf->st_mode & S_IXUSR )	mode |= TOS_S_IXUSR;
+  if( buf->st_mode & S_IRGRP )	mode |= TOS_S_IRGRP;
+  if( buf->st_mode & S_IWGRP )	mode |= TOS_S_IWGRP;
+  if( buf->st_mode & S_IXGRP )	mode |= TOS_S_IXGRP;
+  if( buf->st_mode & S_IROTH )	mode |= TOS_S_IROTH;
+  if( buf->st_mode & S_IWOTH )	mode |= TOS_S_IWOTH;
+  if( buf->st_mode & S_IXOTH )	mode |= TOS_S_IXOTH;
+
+  attr->dev                = HLL_TO_CLL(((UInt64)buf->st_dev));
+  attr->ino                = HL_TO_CL(buf->st_ino);
+  attr->mode               = HL_TO_CL(mode);
+  attr->nlink              = HL_TO_CL(buf->st_nlink);
+  attr->uid                = HL_TO_CL(buf->st_uid);
+  attr->gid                = HL_TO_CL(buf->st_gid);
+  attr->rdev               = HLL_TO_CLL(0); /* FIXME */
+  attr->atime.high_time    = HL_TO_CL(0);
+  attr->atime.time         = HL_TO_CL(buf->st_atime);
+  attr->atime.mikroseconds = HL_TO_CL(0);
+  attr->mtime.high_time    = HL_TO_CL(0);
+  attr->mtime.time         = HL_TO_CL(buf->st_mtime);
+  attr->mtime.mikroseconds = HL_TO_CL(0);
+  attr->ctime.high_time    = HL_TO_CL(0);
+  attr->ctime.time         = HL_TO_CL(buf->st_ctime);
+  attr->ctime.mikroseconds = HL_TO_CL(0);
+  attr->size               = HLL_TO_CLL(buf->st_size);
+  attr->blksize            = HL_TO_CL(buf->st_blksize);
+  attr->blocks             = HLL_TO_CLL(buf->st_blocks);
 }
 
 
