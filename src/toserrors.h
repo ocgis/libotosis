@@ -45,6 +45,7 @@
 #define TOS_EINVFN	-32	/* Invalid function */
 #define TOS_EFILNF	-33	/* File not found */
 #define TOS_EPTHNF	-34	/* Path not found */
+#define TOS_ENOTDIR	TOS_EPTHNF
 #define TOS_ENHNDL	-35	/* No more handles */
 #define TOS_EACCDN	-36	/* Access denied */
 #define TOS_EIHNDL	-37	/* Invalid handle */
@@ -61,6 +62,8 @@
 #define TOS_EPLFMT	-66	/* Invalid program load format */
 #define TOS_EGSBF	-67	/* Memory block growth failure */
 #define TOS_ELOOP	-80	/* Too many symbolic links */
+#define TOS_EEXIST	-85	/* File exists */
+#define TOS_ENOTEMPTY	TOS_EEXIST
 #define TOS_EIO		-90	/* I/O error */
 #define TOS_EMOUNT	-200	/* Mount point crossed */
 

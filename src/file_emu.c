@@ -68,6 +68,10 @@ int translate_error( int err )
   case ESPIPE:
     /* can happen for seeks on non-files, GEMDOS would return EIHDNL */
     return TOS_EIHNDL;
+  case ENOTEMPTY:
+    return TOS_ENOTEMPTY;
+  case ENOTDIR:
+    return TOS_ENOTDIR;
   default:
     DDEBUG( "Cannot translate Unix errno %d (%s)\n", err, strerror(err) );
     return TOS_ERROR;
