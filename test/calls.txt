@@ -1,0 +1,253 @@
+/* Gemdos prototypes */
+
+void    Pterm0( void );
+long    Cconin( void );
+void    Cconout( int c );
+int     Cauxin( void );
+void    Cauxout( int c );
+int     Cprnout( int c );
+long    Crawio( int w );
+long    Crawcin( void );
+long    Cnecin( void );
+int     Cconws( const char *buf );
+void    Cconrs( LINE *buf );
+int     Cconis( void );
+long    Dsetdrv( int drv );
+int     Cconos( void );
+int     Cprnos( void );
+int     Cauxis( void );
+int     Cauxos( void );
+int     Dgetdrv( void );
+
+calls:
+  void    Fsetdta( _DTA *buf );
+tests:
+  fsfirstnext
+
+long    Super( void *stack );
+unsigned int  Tgetdate( void );
+unsigned int  Tsetdate( unsigned int date );
+unsigned int  Tgettime( void );
+unsigned int  Tsettime( unsigned int time );
+_DTA    *Fgetdta( void );
+int     Sversion( void );
+void    Ptermres( long keepcnt, int retcode );
+int     Dfree( _DISKINFO *buf, int driveno );
+int     Dcreate( const char *path );
+int     Ddelete( const char *path );
+int     Dsetpath( const char *path );
+long    Fcreate( const char *filename, int attr );
+long    Fopen( const char *filename, int mode );
+int     Fclose( int handle );
+long    Fread( int handle, long count, void *buf );
+long    Fwrite( int handle, long count, void *buf );
+int     Fdelete( const char *filename );
+long    Fseek( long offset, int handle, int seekmode );
+int     Fattrib( const char *filename, int wflag, int attrib );
+long    Fdup( int handle );
+long    Fforce( int stch, int nonstdh );
+int     Dgetpath( char *path, int driveno );
+void    *Malloc( long number );
+int     Mfree( void *block );
+int     Mshrink( int zero, void *ptr, long size );
+#define Mshrink(ptr, size) Mshrink(0, ptr, size)
+long    Pexec( int mode, char *ptr1, void *ptr2, void *ptr3 );
+void    Pterm( int retcode );
+
+calls:
+  int     Fsfirst( const char *filename, int attr );
+  int     Fsnext( void );
+tests:
+  fsfirstnext
+
+int     Frename( int zero, const char *oldname, const char *newname );
+int     Fdatime( _DOSTIME *timeptr, int handle, int wflag );
+
+/* GEMDOS extensions */
+
+void    *Mxalloc( long number, int mode );
+long    Maddalt( void *start, long size );
+
+/* Network Gemdos Extension */
+
+long	Flock( int handle, int mode, long start, long length );
+
+/* BIOS */
+
+void    Getmpb( _MPB *ptr );
+int     Bconstat( int dev );
+long    Bconin( int dev );
+long    Bconout( int dev, int c );
+long    Rwabs( int rwflag, void *buf, int cnt, int recnr, int dev );
+void    (*Setexc( int number, void (*exchdlr)() )) ();
+#define Setexc(number, exchdlr)	Setexc(number, (void(*)())(exchdlr))
+long    Tickcal( void );
+_BPB    *Getbpb( int dev );
+long    Bcostat( int dev );
+long    Mediach( int dev );
+long    Drvmap( void );
+long    Kbshift( int mode );
+#define Getshift() Kbshift(-1)
+
+/* XBios */
+
+void    Initmous( int type, _PARAM *par, void (*mousevec)() );
+#define Initmous(type, par, mousevec) Initmous(type, par, (void(*)()) mousevec)
+void    *Ssbrk( int count );
+void    *Physbase( void );
+void    *Logbase( void );
+int     Getrez( void );
+void    Setscreen( void *laddr, void *paddr, int rez );
+void    Setpalette( void *pallptr );
+int     Setcolor( int colornum, int color );
+int     Floprd( void *buf, long filler, int devno, int sectno,
+               int trackno, int sideno, int count );
+int     Flopwr( void *buf, long filler, int devno, int sectno,
+               int trackno, int sideno, int count );
+int     Flopfmt( void *buf, long filler, int devno, int spt, int trackno,
+                int sideno, int interlv, long magic, int virgin );
+void    Midiws( int cnt, void *ptr );
+void    Mfpint( int erno, void (*vector)() );
+_IOREC   *Iorec( int dev );
+long    Rsconf( int baud, int ctr, int ucr, int rsr, int tsr, int scr );
+_KEYTAB  *Keytbl( void *unshift, void *shift, void *capslock );
+long    Random( void );
+void    Protobt( void *buf, long serialno, int disktype, int execflag );
+int     Flopver( void *buf, long filler, int devno, int sectno,
+                int trackno, int sideno, int count );
+void    Scrdmp( void );
+int     Cursconf( int func, int rate );
+void    Settime( unsigned long time );
+unsigned long  Gettime( void );
+void    Bioskeys( void );
+void    Ikbdws( int count, void *ptr );
+void    Jdisint( int number );
+void    Jenabint( int number );
+char    Giaccess( char data, int regno );
+void    Offgibit( int bitno );
+void    Ongibit( int bitno );
+void    Xbtimer( int timer, int control, int data, void (*vector)() );
+void    *Dosound( void *buf );
+int     Setprt( int config );
+_KBDVECS *Kbdvbase( void );
+int     Kbrate( int initial, int repeat );
+void    Prtblk( _PBDEF *par );
+void    Vsync( void );
+long    Supexec( long (*func)() );
+#define Supexec(func) Supexec((long (*) ()) func)
+void    Puntaes( void );
+int     Floprate( int devno, int newrate );
+int     Blitmode( int mode );
+
+/* TOS030 XBios */
+int     DMAread( long sector, int count, void *buffer, int devno );
+int     DMAwrite( long sector, int count, void *buffer, int devno );
+int     NVMaccess( int opcode, int start, int count, void *buffer );
+long    Bconmap( int devno );
+int     Esetshift( int shftMode );
+#define EsetShift Esetshift
+int     Egetshift( void );
+#define EgetShift Egetshift
+int     EsetBank( int bankNum );
+int     EsetColor( int colorNum, int color );
+void    EsetPalette( int colorNum, int count, int *palettePtr );
+void    EgetPalette( int colorNum, int count, int *palettePtr );
+int     EsetGray( int swtch );
+int     EsetSmear( int swtch );
+
+/* MiNT */
+int Syield( void );				/* GEMDOS 0xff */
+int Fpipe( short *ptr );			/* GEMDOS 0x100 */
+long Fcntl( int f, long arg, int cmd);		/* GEMDOS 0x104 */
+#define Fcntl(f, arg, cmd) Fcntl(f, (long)(arg), cmd)
+long Finstat( int f );				/* GEMDOS 0x105 */
+long Foutstat( int f );				/* GEMDOS 0x106 */
+long Fgetchar(int f, int mode);			/* GEMDOS 0x107 */
+long Fputchar( int f, long c, int mode ); 	/* GEMDOS 0x108 */
+long Pwait( void );				/* GEMDOS 0x109 */
+int Pnice( int delta );				/* GEMDOS 0x10a */
+int Pgetpid( void );				/* GEMDOS 0x10b */
+int Pgetppid( void );				/* GEMDOS 0x10c */
+int Pgetpgrp( void );				/* GEMDOS 0x10d */
+int Psetpgrp(int pid, int newgrp);		/* GEMDOS 0x10e */
+int Pgetuid( void );				/* GEMDOS 0x10f */
+int Psetuid( int id );				/* GEMDOS 0x110 */
+int Pkill( int pid, int sig );			/* GEMDOS 0x111 */
+long Psignal(int sig, long handler);		/* GEMDOS 0x112 */
+long Pvfork( void );				/* GEMDOS 0x113 */
+int Pgetgid( void );				/* GEMDOS 0x114 */
+int Psetgid(int id);				/* GEMDOS 0x115 */
+long Psigblock(unsigned long mask);		/* GEMDOS 0x116 */
+long Psigsetmask(unsigned long mask);		/* GEMDOS 0x117 */
+long Pusrval(long arg);				/* GEMDOS 0x118 */
+int Pdomain(int newdom);			/* GEMDOS 0x119 */
+void Psigreturn( void );			/* GEMDOS 0x11a */
+long Pfork( void );				/* GEMDOS 0x11b */
+long Pwait3(int flag, long *rusage);		/* GEMDOS 0x11c */
+int Fselect(unsigned int timeout, long *rfds, long *wfds, long *xfds); /* GEMDOS 0x11d */
+int Prusage( long r[8] );			/* GEMDOS 0x11e */
+long Psetlimit(int lim, long value);		/* GEMDOS 0x11f */
+long Talarm( long secs );			/* GEMDOS 0x120 */
+void Pause( void );				/* GEMDOS 0x121 */
+long Sysconf( int n );				/* GEMDOS 0x122 */
+long Psigpending( void );			/* GEMDOS 0x123 */
+long Dpathconf( const char *name, int n );	/* GEMDOS 0x124 */
+long Pmsg( int mode, long mbox, void *msg ); 	/* GEMDOS 0x125 */
+long Fmidipipe( int pid, int in, int out );	/* GEMDOS 0x126 */
+int Prenice( int pid, int delta );		/* GEMDOS 0x127 */
+long Dopendir( const char *name, int flag );	/* GEMDOS 0x128 */
+long Dreaddir( int buflen, long dir, char *buf); /*GEMDOS 0x129 */
+#define Dreaddir(buflen, dir, buf) Dreaddir(buflen, (long)(dir), buf)
+long Drewinddir( long dir );			/* GEMDOS 0x12a */
+#define Drewinddir(dir) Drewinddir((long)(dir))
+long Dclosedir( long dir );			/* GEMDOS 0x12b */
+#define Dclosedir(dir) Dclosedir((long)(dir))
+long Fxattr( int flag, char *name, void *buf );	/* GEMDOS 0x12c */
+long Flink( char *oldname, char *newname );	/* GEMDOS 0x12d */
+long Fsymlink( char *oldname, char *newname );	/* GEMDOS 0x12e */
+long Freadlink( int siz, char *buf, char *name); /*GEMDOS 0x12f */
+long Dcntl( int cmd, char *name, long arg );	/* GEMDOS 0x130 */
+long Fchown( char *name, int uid, int gid);	/* GEMDOS 0x131 */
+long Fchmod( char *name, int mode );		/* GEMDOS 0x132 */
+int Pumask( int mask );				/* GEMDOS 0x133 */
+long Psemaphore(int mode, long id, long timeout); /* GEMDOS 0x134 */
+int Dlock( int mode, int drive );		/* GEMDOS 0x135 */
+void Psigpause( unsigned long mask);		/* GEMDOS 0x136 */
+long Psigaction(int sig, long act, long oact);	/* GEMDOS 0x137 */
+#define Psigaction(sig, act, oact) \
+	Psigaction(sig, (long)(act), (long)(oact))
+int Pgeteuid( void );				/* GEMDOS 0x138 */
+int Pgetegid( void );				/* GEMDOS 0x139 */
+long Pwaitpid(int pid, int flag, long *rusage);	/* GEMDOS 0x13a */
+long Dgetcwd(char *path, int drv, int size);	/* GEMDOS 0x13b */
+long Salert(char *msg);				/* GEMDOS 0x13c */
+
+/* The following are not yet official... */
+long Tmalarm( long secs );			/* GEMDOS 0x13d */
+long Psigintr( short vec, short sig);		/* GEMDOS 0x13e */
+long Suptime( long *uptime, long *avenrun);		/* GEMDOS 0x13f */
+long Dxreaddir( short len, long handle, char * buf, long xattr, long *xret );	/* GEMDOS 0x142 */
+short Dseteuid( short id );			/* GEMDOS 0x143 */
+short Dsetegid( short id );			/* GEMDOS 0x144 */
+short Dsetauid( short id );			/* GEMDOS 0x145 */
+short Dgetauid( short id );			/* GEMDOS 0x146 */
+long Pgetgroups( short gidsetlen, __gid_t *gidset );	/* GEMDOS 0x147 */
+long Psetgroups( short gidsetlen, __gid_t *gidset );	/* GEMDOS 0x148 */
+long Tsetitimer( short which, long *interval, long *value, long *ointerval, long *ovalue );	/* GEMDOS 0x149 */
+short Psetreuid( short rid, short eid );	/* GEMDOS 0x14e */
+short Psetregid( short rid, short eid );	/* GEMDOS 0x14f */
+long Sync( void );				/* GEMDOS 0x150 */
+void Shutdown( long restart );			/* GEMDOS 0x151 */
+char *Dreadlabel( char *path, char *label, short maxlen );		/* GEMDOS 0x152 */
+char *Dwritelabel( char *path, char *label);		/* GEMDOS 0x153 */
+long Ssystem(short mode, long arg1, long arg2);    /* GEMDOS 0x154 */
+#define Ssystem(mode, arg1, arg2) \
+   Ssystem(mode, (long)(arg1), (long)(arg2))
+long Tgettimeofday(long tvp, long tzp);            /* GEMDOS 0x155 */
+#define Tgettimeofday(tvp, tzp) \
+   Tgettimeofday((long)tvp, (long)tzp)
+long Tsettimeofday(long tvp, long tzp);            /* GEMDOS 0x156 */
+#define Tsettimeofday(tvp, tzp) \
+   Tsettimeofday((long)tvp, (long)tzp)
+long Pgetpriority(short which, short who);         /* GEMDOS 0x158 */
+long Psetpriority(short which, short who, short pri);          /* GEMDOS 0x159 */
