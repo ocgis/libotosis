@@ -175,10 +175,11 @@ void init_gemdos( void )
 		FdCnt[i] = 0;
 	
 	/* emulate a GEMDOS redirection if Unix stdin or stdout isn't a tty */
-	if (!isatty(0))
+/*  	if (!isatty(0)) */
 		FdMap[GEMDOS_STDIN] = 0;
-	if (!isatty(1))
+/*  	if (!isatty(1)) */
 		FdMap[GEMDOS_STDOUT] = 1;
+		FdMap[GEMDOS_STDAUX] = 2;
 	
 	find_info.dir_pointer = NULL;
 }
