@@ -455,7 +455,6 @@ void stat_to_xattr( Xattr *attr, struct stat *buf )
   attr->index = HL_TO_CL(buf->st_ino);
   attr->dev = HW_TO_CW(buf->st_dev);
   attr->nlink = HW_TO_CW(buf->st_nlink);
-  fprintf(stderr, "st_nlink = 0x%x nlink = 0x%x\n", buf->st_nlink, attr->nlink);
   attr->uid = HW_TO_CW(buf->st_uid);
   attr->gid = HW_TO_CW(buf->st_gid);
   attr->size = HL_TO_CL(buf->st_size);
