@@ -605,10 +605,11 @@ GEMDOSFUNC(Dfree)
   TOSARG(SInt16,drive);
 
   ARG_USED(drive);
-  buf->b_free = 1000;
-  buf->b_total = 2000;
-  buf->b_secsize = 512;
-  buf->b_clsize = 4;
+  buf->b_free    = HL_TO_CL(1000);
+  buf->b_total   = HL_TO_CL(2000);
+  buf->b_secsize = HL_TO_CL(512);
+  buf->b_clsize  = HL_TO_CL(4);
+
   return TOS_E_OK;
 }
 
