@@ -66,7 +66,7 @@ typedef struct {
   UInt16 d_date;		/* Date */
   UInt32 d_length;		/* Size */
   char d_fname[ 14 ];		/* File name */
-} Dta;
+} PACKED Dta;
 
 typedef struct {
   Ptr32 lowtpa;			/* Pointer to the TPA */
