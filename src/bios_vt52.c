@@ -20,11 +20,24 @@
  *
  ************************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 #include <unistd.h>
 #include <sys/types.h>
-#include <ncurses/curses.h>
-#include <ncurses/term.h>
 #include <sys/ioctl.h>
+
+#ifdef HAVE_NCURSES_H
+#include <ncurses.h>
+#else /* HAVE_NCURSES_CURSES_H */
+#include <ncurses/curses.h>
+#endif /* HAVE_NCURSES_H */
+#ifdef HAVE_TERM_H
+#include <term.h>
+#else /* HAVE_NCURSES_TERM_H */
+#include <ncurses/term.h>
+#endif /* HAVE_TERM_H */
 
 #include "div.h"
 #include "vt52.h"
