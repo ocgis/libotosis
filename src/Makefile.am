@@ -33,7 +33,7 @@ common_sources = \
 	scancode_us.c tty.c strace.c
 
 common_headers = \
-	bindproto.h div.h fd.h memory.h prototypes.h \
+	bindproto.h client_endian.h div.h fd.h memory.h prototypes.h \
 	toserrors.h traps.h version.h vt52.h xbios.h
 
 BUILT_SOURCES =  optiondef.c libotosis_optiondef.h scancode_us.c
