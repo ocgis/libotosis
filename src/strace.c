@@ -289,7 +289,10 @@ static int tos_vfprintf( FILE *f, const char *fmt, const void *oargp,
 			if (cnt == 1 && extra_arg)
 				struct_p = *(const char **)extra_arg, extra_arg = NULL;
 			else
-				struct_p = *((const char **)oargp)++;
+            {
+				struct_p = *((const char **)oargp);
+                oargp += sizeof(const char *);
+            }
 
             struct_p = (const char *)CL_TO_HL((UInt32)struct_p);
 
@@ -425,7 +428,8 @@ static void single_arg(const char *format,
     {
 		unsigned date;
 
-        date = CW_TO_HW(*((unsigned short *)(*oargpp))++);
+        date = CW_TO_HW(*((unsigned short *)(*oargpp)));
+        *oargpp += sizeof(unsigned short);
 
 		fprintf(stdout, "%02d.%02d.%d",
                 date & 0x1f, (date >> 5) & 0x0f,
@@ -435,7 +439,8 @@ static void single_arg(const char *format,
     {
 		unsigned time;
 
-        time = CW_TO_HW(*((unsigned short *)(*oargpp))++);
+        time = CW_TO_HW(*((unsigned short *)(*oargpp)));
+        *oargpp += sizeof(unsigned short);
 
 		fprintf(stdout, "%02d:%02d:%02d",
                 (time >> 11) & 0x1f, (time >> 5) & 0x3f,
@@ -457,26 +462,44 @@ static void single_arg(const char *format,
 		if (is_quart)
         {
 			if (is_signed)
-			  fprintf(stdout, "%c,", *((signed char *)*oargpp)++);
+            {
+			  fprintf(stdout, "%c,", *((signed char *)*oargpp));
+              *oargpp += sizeof(signed char);
+            }
 			else
-			  fprintf(stdout, "%c,", *((unsigned char *)*oargpp)++);
+            {
+			  fprintf(stdout, "%c,", *((unsigned char *)*oargpp));
+              *oargpp += sizeof(unsigned char);
+            }
 		}
 
 		if (is_short)
         {
 			if (is_signed)
-			  fprintf(stdout, format, ntohs(*((signed short *)(*oargpp))++));
+            {
+			  fprintf(stdout, format, ntohs(*((signed short *)(*oargpp))));
+              *oargpp += sizeof(signed short);
+            }
 			else
-			  fprintf(stdout, format, ntohs(*((unsigned short *)(*oargpp))++));
+            {
+			  fprintf(stdout, format, ntohs(*((unsigned short *)(*oargpp))));
+              *oargpp += sizeof(unsigned short);
+            }
 		}
 		else
         {
 			if (is_signed)
+            {
 			  fprintf(stdout,
                       format,
-                      (long)ntohl(*((signed long *)(*oargpp))++));
+                      (long)ntohl(*((signed long *)(*oargpp))));
+              *oargpp += sizeof(signed long);
+            }
 			else
-			  fprintf(stdout, format, ntohl(*((unsigned long *)(*oargpp))++));
+            {
+			  fprintf(stdout, format, ntohl(*((unsigned long *)(*oargpp))));
+              *oargpp += sizeof(unsigned long);
+            }
 		}
 	}
 
